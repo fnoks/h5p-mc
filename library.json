@@ -1,0 +1,57 @@
+{
+  "title": "Mini course",
+  "description": "Mini course consisting of lessons",
+  "machineName": "H5P.MiniCourse",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 0,
+  "runnable": 1,
+  "embedTypes": [
+    "iframe"
+  ],
+  "license": "MIT",
+  "author": "Joubel AS (fnoks)",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 17
+  },
+  "preloadedCss": [
+    {
+      "path": "dist/h5p-mini-course.css"
+    }
+  ],
+  "preloadedJs": [
+    {
+      "path": "dist/h5p-mini-course.js"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    },
+    {
+      "machineName": "H5P.JoubelUI",
+      "majorVersion": 1,
+      "minorVersion": 3
+    }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.ColorSelector",
+      "majorVersion": 1,
+      "minorVersion": 2
+    },
+    {
+      "machineName": "H5PEditor.VerticalTabs",
+      "majorVersion": 1,
+      "minorVersion": 3
+    },
+    {
+      "machineName": "H5PEditor.ShowWhen",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+.h5p-mini-course-summary {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  text-align: center;
+  padding: 3rem;
+  box-sizing: border-box;
+}
+.h5p-mini-course-summary * {
+  box-sizing: border-box;
+}
+.h5p-mini-course-summary > * {
+  margin-bottom: 1rem;
+}
+.h5p-mini-course-summary-header {
+  font-size: 2em;
+  max-height: 3rem;
+  line-height: 1;
+}
+.h5p-mini-course-summary-greeting {
+  max-height: 3rem;
+}
+.h5p-mini-course-summary .h5p-joubelui-score-bar {
+  max-height: 3rem;
+}
+.h5p-mini-course-summary-lesson-results {
+  max-height: calc(100% - 14rem);
+  overflow: auto;
+  width: 100%;
+  display: inline-block;
+}
+.h5p-mini-course-summary-lesson-results::-webkit-scrollbar {
+  width: 0.5em;
+  background-color: #e0e0e0;
+}
+.h5p-mini-course-summary-lesson-results::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+}
+.h5p-mini-course-summary-lesson-result {
+  width: 100%;
+  text-align: left;
+  padding: 0.5em 1em;
+  border-top: 1px solid #ccc;
+}
+.h5p-mini-course-summary-lesson-result:last-child {
+  border-bottom: 1px solid #ccc;
+}
+.h5p-mini-course-summary-lesson-result .prefix {
+  color: #888;
+}
+.h5p-mini-course-summary-lesson-result .prefix:after {
+  content: ':';
+  padding-right: 1em;
+}
+
+.h5p-mini-course-summary-lesson-result .score {
+  float: right;
+}

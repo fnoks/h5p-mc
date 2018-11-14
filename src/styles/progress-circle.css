@@ -1,0 +1,71 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic);
+
+.h5p-progress-circle-label {
+  font-size: 110%;
+  margin: 0.5em 0;
+}
+.h5p-progress-circle-textual-progress {
+  font-size: 1.8em;
+}
+.h5p-progress-circle-textual-progress-divider {
+  color: #999;
+  font-size: 0.35em;
+  padding: 0 0.6em;
+  vertical-align: middle;
+}
+.radial-progress {
+  margin: 0 auto;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 6px solid #202126;
+  box-shadow: 1px 3px 3px 0px #000;
+  position: relative;
+  background-color: #111;
+}
+.radial-progress .circle .mask {
+  width: 76px;
+  height: 76px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+.radial-progress .circle .fill,
+.radial-progress .circle .shadow {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 50%;
+}
+.radial-progress .circle .shadow {
+  box-shadow: inset 0px 0px 5px 3px #000;
+}
+.radial-progress .circle .mask,
+.radial-progress .circle .fill {
+  -webkit-backface-visibility: hidden;
+  transition: -webkit-transform 1s;
+  transition: -ms-transform 1s;
+  transition: transform 1s;
+}
+.radial-progress .circle .mask {
+  clip: rect(0px, 76px, 76px, 38px);
+}
+.radial-progress .circle .mask .fill {
+  clip: rect(0px, 38px, 76px, 0px);
+  background-color: #43B47C;
+}
+.h5p-mini-course-score .radial-progress .circle .mask .fill {
+  background-color: #2657a4;
+}
+.radial-progress .inset {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  margin-left: 10px;
+  margin-top: 10px;
+  background: #1C1D21;
+  border-radius: 50%;
+  border: 6px solid #202126;
+  box-shadow: inset 0 0 20px #000;
+  box-sizing: border-box;
+}

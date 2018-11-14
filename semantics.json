@@ -1,0 +1,370 @@
+[
+  {
+    "name": "units",
+    "type": "list",
+    "entity": "course unit",
+    "label": "Course units",
+    "widgets": [
+      {
+        "name": "VerticalTabs",
+        "label": "Default"
+      }
+    ],
+    "min": 1,
+    "defaultNum": 1,
+    "field": {
+      "name": "unit",
+      "type": "group",
+      "label": "Unit",
+      "fields": [
+        {
+          "name": "header",
+          "type": "text",
+          "label": "Header",
+          "importance": "high"
+        },
+        {
+          "name": "intro",
+          "type": "text",
+          "label": "Introduction",
+          "optional": true
+        },
+        {
+          "name": "action",
+          "type": "library",
+          "label": "Content",
+          "options": [
+            "H5P.AdvancedText 1.1",
+            "H5P.Link 1.3",
+            "H5P.Image 1.1",
+            "H5P.Video 1.3",
+            "H5P.Audio 1.2",
+            "H5P.Collage 0.3",
+            "H5P.Column 1.4",
+            "H5P.Accordion 1.0",
+            "H5P.Table 1.1",
+            "H5P.ImageHotspots 1.5",
+            "H5P.ImageHotspotQuestion 1.5",
+            "H5P.Blanks 1.7",
+            "H5P.SingleChoiceSet 1.9",
+            "H5P.MultiChoice 1.9",
+            "H5P.TrueFalse 1.5",
+            "H5P.DragQuestion 1.9",
+            "H5P.Summary 1.7",
+            "H5P.DragText 1.5",
+            "H5P.MarkTheWords 1.6",
+            "H5P.MemoryGame 1.1",
+            "H5P.QuestionSet 1.12",
+            "H5P.InteractiveVideo 1.15",
+            "H5P.CoursePresentation 1.17",
+            "H5P.Timeline 1.1",
+            "H5P.DocumentationTool 1.4",
+            "H5P.TwitterUserFeed 1.0",
+            "H5P.AppearIn 1.0",
+            "H5P.Dialogcards 1.5",
+            "H5P.Flashcards 1.4"
+          ]
+        },
+        {
+          "label": "Max score",
+          "name": "maxScore",
+          "description": "If set to zero, continue button is displayed initially, and no confirmation is needed",
+          "type": "number",
+          "default": 0,
+          "widget": "showWhen",
+          "optional": true,
+          "showWhen": {
+            "detach": true,
+            "rules": [
+              {
+                "field": "action",
+                "equals": [
+                  "H5P.ImageHotspots",
+                  "H5P.ImageHotspotQuestion",
+                  "H5P.Blanks",
+                  "H5P.SingleChoiceSet",
+                  "H5P.MultiChoice",
+                  "H5P.TrueFalse",
+                  "H5P.DragQuestion",
+                  "H5P.Summary",
+                  "H5P.DragText",
+                  "H5P.MarkTheWords",
+                  "H5P.MemoryGame",
+                  "H5P.QuestionSet",
+                  "H5P.InteractiveVideo",
+                  "H5P.CoursePresentation"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "behaviour",
+    "type": "group",
+    "label": "Behaviour settings",
+    "fields": [
+      {
+        "name": "retry",
+        "type": "boolean",
+        "label": "Enable retry",
+        "default": true
+      },
+      {
+        "name": "forceSequential",
+        "type": "boolean",
+        "label": "Force user to interact with all course units in sequence",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "layout",
+    "type": "group",
+    "label": "Layout",
+    "fields": [
+      {
+        "name": "minimumWidth",
+        "type": "number",
+        "label": "Minimum width in pixels",
+        "default": 200,
+        "min": 200
+      },
+      {
+        "name": "fullScreen",
+        "label": "Fullscreen settings",
+        "type": "group",
+        "fields": [
+          {
+            "name": "fullScreenMode",
+            "label": "Fullscreen mode",
+            "type": "select",
+            "options": [
+              {
+                "value": "always",
+                "label": "Always"
+              },
+              {
+                "value": "never",
+                "label": "Never"
+              },
+              {
+                "value": "dynamic",
+                "label": "Dynamically"
+              },
+              {
+                "value": "user",
+                "label": "User decides"
+              }
+            ],
+            "default": "always"
+          },
+          {
+            "name": "forceFullScreenWidthThreshold",
+            "label": "Force fullscreen mode when narrower than (in pixels)",
+            "type": "number",
+            "min": 0,
+            "widget": "showWhen",
+            "default": 500,
+            "showWhen": {
+              "detach": true,
+              "rules": [
+                {
+                  "field": "fullScreenMode",
+                  "equals": [
+                    "dynamic"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "resultsPlacement",
+        "type": "group",
+        "label": "Placement of results widget",
+        "fields": [
+          {
+            "name": "default",
+            "type": "select",
+            "default": "right",
+            "label": "Default placement",
+            "options": [
+              {
+                "value": "right",
+                "label": "Right"
+              },
+              {
+                "value": "top",
+                "label": "Top"
+              },
+              {
+                "value": "left",
+                "label": "Left"
+              }
+            ]
+          },
+          {
+            "name": "exceptions",
+            "label": "Exceptions",
+            "type": "list",
+            "entity": "exception",
+            "defaultNum": 0,
+            "optional": true,
+            "field": {
+              "name": "Exception",
+              "type": "group",
+              "fields": [
+                {
+                  "name": "columns",
+                  "label": "Columns",
+                  "type": "number",
+                  "default": 1
+                },
+                {
+                  "name": "placement",
+                  "type": "select",
+                  "default": "top",
+                  "options": [
+                    {
+                      "value": "right",
+                      "label": "Right"
+                    },
+                    {
+                      "value": "top",
+                      "label": "Top"
+                    },
+                    {
+                      "value": "left",
+                      "label": "Left"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "theme",
+    "type": "group",
+    "label": "Look & feel",
+    "fields": [
+      {
+        "name": "backgroundColorUnits",
+        "type": "text",
+        "label": "Background color for course units panel",
+        "widget": "colorSelector",
+        "default": "fff"
+      },
+      {
+        "name": "backgroundColorResults",
+        "type": "text",
+        "label": "Background color for results panel",
+        "widget": "colorSelector",
+        "default": "fff"
+      }
+    ]
+  },
+  {
+    "name": "dictionary",
+    "label": "Dictionary",
+    "type": "group",
+    "common": true,
+    "fields": [
+      {
+        "name": "lessonStartLabel",
+        "type": "text",
+        "default": "Start Lesson"
+      },
+      {
+        "name": "lessonLockedLabel",
+        "type": "text",
+        "default": "Locked"
+      },
+      {
+        "name": "lessonCompletedLabel",
+        "type": "text",
+        "default": "Lesson completed"
+      },
+      {
+        "name": "skipLabel",
+        "type": "text",
+        "default": "Skip"
+      },
+      {
+        "name": "continueLabel",
+        "type": "text",
+        "default": "Continue"
+      },
+      {
+        "name": "maxScoreLabel",
+        "type": "text",
+        "default": "Max Score"
+      },
+      {
+        "name": "scoreLabel",
+        "type": "text",
+        "default": "Your Score"
+      },
+      {
+        "name": "progressLabel",
+        "type": "text",
+        "default": "Lessons Completed"
+      },
+      {
+        "name": "youGotLabel",
+        "type": "text",
+        "default": "You Got"
+      },
+      {
+        "name": "infoLessonLabel",
+        "type": "text",
+        "default": "Info Lesson"
+      },
+      {
+        "name": "infoLessonValue",
+        "type": "text",
+        "default": "0 points"
+      },
+      {
+        "name": "noScoreLabel",
+        "type": "text",
+        "default": "No Score"
+      },
+      {
+        "name": "retryButtonLabel",
+        "type": "text",
+        "default": "Retry"
+      },
+      {
+        "name": "summary",
+        "label": "Summary page",
+        "type": "group",
+        "fields": [
+          {
+            "name": "header",
+            "type": "text",
+            "default": "You have completed the mini course!"
+          },
+          {
+            "name": "overallResult",
+            "type": "text",
+            "default": "You won %score of %maxScore points!"
+          },
+          {
+            "name": "lessonPrefixLabel",
+            "type": "text",
+            "default": "Lesson %lessonIndex"
+          }
+        ]
+      }
+
+    ]
+  }
+]
