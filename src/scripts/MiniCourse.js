@@ -45,10 +45,6 @@ export default class MiniCourse extends H5P.EventDispatcher {
 
     $unitPanel.append(renderer.getElement());
 
-    renderer.on('show-popup', function (event) {
-      showPopup(event.data.popupContent);
-    });
-
     var maxScore = renderer.getMaxScore();
 
     var $results = $('<div>', {
@@ -212,7 +208,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
      */
     self.attach = ($container) => {
       self.$container = $container;
-      popup = new Popup(1, self.$container); // TODO - use options - or remove this z-index thingy??
+      popup = Popup.popup(self.$container); // TODO - use options - or remove this z-index thingy??
 
       // Something strange about the order here:
       score.appendTo($scorePanel);

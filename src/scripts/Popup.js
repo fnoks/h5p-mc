@@ -2,6 +2,14 @@ const $ = H5P.jQuery;
 
 export default class Popup extends H5P.EventDispatcher {
 
+  static popup($container) {
+    if (Popup.instance === undefined) {
+      Popup.instance = new Popup(100, $container);
+    }
+
+    return Popup.instance;
+  }
+
   constructor(popupZIndex, $container) {
     super();
 

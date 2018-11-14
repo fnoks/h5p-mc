@@ -18,9 +18,13 @@ export default class CourseUnit extends H5P.EventDispatcher {
     const libraryMeta = H5P.libraryFromString(options.action.library);
     this.machineName = libraryMeta.machineName.toLowerCase().replace('.', '-');
 
-    self.appendTo = function ($container) {
+    /*self.appendTo = function ($container) {
       $unitPanel.appendTo($container);
-    };
+    };*/
+
+    /*self.setDomElement = function ($ref) {
+      this.$domElement = $ref;
+    };*/
 
     self.hasScore = function () {
       return (options.maxScore !== 0);
@@ -30,15 +34,15 @@ export default class CourseUnit extends H5P.EventDispatcher {
       return options.maxScore ? options.maxScore : 0;
     };
 
-    self.enable = function () {
-      enabled = true;
+    //self.enable = function () {
+      /*enabled = true;
       $unitPanel.removeClass('locked').addClass('enabled');
       $beginButton.html(Dictionary.get('lessonStartLabel')).removeAttr('disabled').attr('data-state', 'ready');
 
       setTimeout(function () {
         $beginButton.focus();
-      },1);
-    };
+      },1);*/
+    //};
 
     self.show = function () {
       if (!enabled) {
@@ -46,18 +50,6 @@ export default class CourseUnit extends H5P.EventDispatcher {
       }
 
       if (instance === undefined) {
-        instance = H5P.newRunnable(options.action, Options.contentId);
-
-        instance.on('xAPI', function (event) {
-          var stmt = event.data.statement;
-          var isParent = (stmt.context.contextActivities.parent === undefined);
-
-          if (isParent && stmt.result !== undefined && stmt.result.completion === true) {
-            self.score = event.getScore();
-            self.headerButton.continue();
-          }
-        });
-
 
         var $h5pContent = $('<div>', {
           'class': 'h5p-sub-content'
@@ -137,9 +129,7 @@ export default class CourseUnit extends H5P.EventDispatcher {
       self.trigger('resize');
     };
 
-    self.setWidth = function (width) {
-      $unitPanel.css({width: width + '%'});
-    };
+
 
     self.hide = function (score) {
       $('body').off('keyup.h5p-escape');
@@ -173,6 +163,24 @@ export default class CourseUnit extends H5P.EventDispatcher {
     });*/
 
 
+  }
+
+  getInstance() {
+    if (this.instance === undefined) {
+      this.instance = H5P.newRunnable(this.options.action, Options.contentId);
+
+      this.instance.on('xAPI', function (event) {
+        var stmt = event.data.statement;
+        var isParent = (stmt.context.contextActivities.parent === undefined);
+
+        if (isParent && stmt.result !== undefined && stmt.result.completion === true) {
+          self.score = event.getScore();
+          self.headerButton.continue();
+        }
+      });
+    }
+
+    return this.instance;
   }
 
   getMachineName() {

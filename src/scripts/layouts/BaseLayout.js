@@ -18,6 +18,7 @@ export default class BaseLayout extends H5P.EventDispatcher {
     }*/
 
     courseUnit.enable();
+    this.enable(0);
   }
 
   getMaxScore() {

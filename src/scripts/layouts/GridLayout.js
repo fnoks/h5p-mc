@@ -4,44 +4,6 @@ import Dictionary from '../Dictionary';
 
 const $ = H5P.jQuery;
 
-class HeaderButton extends H5P.EventDispatcher {
-
-  constructor() {
-    super();
-    var self = this;
-
-    var state = 'skip';
-
-    // Create dom element
-    var $action = $('<a>', {
-      'class': 'header-button skip-lesson',
-      'text': Dictionary.get('skipLabel'),
-      click: function () {
-        self.trigger(state);
-      }
-    });
-
-    self.getDomElement = function () {
-      return $action;
-    };
-
-    self.setState = function (newState) {
-      state = newState;
-      $action.toggleClass('h5p-joubelui-button continue', state === 'continue')
-        .toggleClass('skip-lesson', state === 'skip')
-        .text(state === 'skip' ? Dictionary.get('skipLabel') : Dictionary.get('continueLabel'));
-    };
-
-    self.skip = function () {
-      self.setState('skip');
-    };
-
-    self.continue = function () {
-      self.setState('continue');
-    };
-  }
-}
-
 class UnitHeader {
 
   constructor(maxScore) {
@@ -75,39 +37,23 @@ class UnitHeader {
     self.setState('ready');
   }
 }
-export default class GridLayout extends PopupLayout {
 
-  constructor() {
+class GridUnit extends H5P.EventDispatcher {
+  constructor(courseUnit) {
     super();
 
-    this.minimumWidth = Options.all().layout.minimumWidth;
-
-    this.$grid = $('<div>', {
-      'class': 'h5p-grid h5p-units'
-    });
-
+    this.enabled = false;
 
     this.$unitPanel = $('<div>', {
       'class': 'h5p-mini-course-unit-panel locked'
     });
 
-
-  }
-
-  getElement() {
-    return this.$grid;
-  }
-
-  add(courseUnit) {
-    super.add(courseUnit);
-    //courseUnit.appendTo(this.$grid);
-    //
     this.$unitPanelInner = $('<div>', {
       'class': 'h5p-mini-course-unit-panel-inner ' + courseUnit.getMachineName(),
       tabIndex: 0
     }).appendTo(this.$unitPanel);
 
-    var unitHeader = new UnitHeader(self.getMaxScore());
+    var unitHeader = new UnitHeader(courseUnit.getMaxScore());
     unitHeader.getDomElement().appendTo(this.$unitPanelInner);
 
     $('<div>', {
@@ -124,10 +70,62 @@ export default class GridLayout extends PopupLayout {
       'class': 'h5p-mini-course-unit-begin',
       html: Dictionary.get('lessonLockedLabel'),
       disabled: 'disabled',
-      click: () => {
-        this.show();
-      }
+      click: () => this.trigger('show')
     }).appendTo(this.$unitPanelInner);
+  }
+
+  getDomElement() {
+    return this.$unitPanel;
+  }
+
+  setWidth(width) {
+    this.$unitPanel.css({width: width + '%'});
+  }
+
+  enable() {
+    this.enabled = true;
+    this.$unitPanel.removeClass('locked').addClass('enabled');
+    this.$beginButton.html(Dictionary.get('lessonStartLabel')).removeAttr('disabled').attr('data-state', 'ready');
+
+    setTimeout(() => this.$beginButton.focus(), 1);
+  }
+}
+
+
+export default class GridLayout extends PopupLayout {
+
+  constructor() {
+    super();
+
+    this.minimumWidth = Options.all().layout.minimumWidth;
+
+    this.$grid = $('<div>', {
+      'class': 'h5p-grid h5p-units'
+    });
+
+    this.elements =[];
+  }
+
+  getElement() {
+    return this.$grid;
+  }
+
+  add(courseUnit) {
+
+    //courseUnit.appendTo(this.$grid);
+    //
+    const gridElement = new GridUnit(courseUnit);
+    this.elements.push(gridElement);
+    const $domElement = gridElement.getDomElement();
+    $domElement.appendTo(this.$grid);
+    //courseUnit.setDomElement($domElement);
+    //
+    super.add(courseUnit);
+
+    gridElement.on('show', () => {
+      console.log('SHOWING!!');
+      this.show(courseUnit);
+    });
   }
 
   resize(width) {
@@ -143,8 +141,8 @@ export default class GridLayout extends PopupLayout {
 
     // iterate course units:
     //var widestUnit = 0;
-    this.courseUnits.forEach(function (unit) {
-      unit.setWidth(columnsWidth);
+    this.elements.forEach(function (element) {
+      element.setWidth(columnsWidth);
     });
   }
 
@@ -155,6 +153,10 @@ export default class GridLayout extends PopupLayout {
     });
 
     // Enable first unit:
-    this.courseUnits[0].enable();
+    //this.courseUnits[0].enable();
+  }
+
+  enable(index) {
+    this.elements[index].enable();
   }
 }
