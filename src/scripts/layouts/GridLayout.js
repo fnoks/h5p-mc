@@ -99,25 +99,25 @@ export default class GridLayout extends PopupLayout {
 
     this.minimumWidth = Options.all().layout.minimumWidth;
 
-    this.$grid = $('<div>', {
-      'class': 'h5p-grid h5p-units'
+    this.$container = $('<div>', {
+      'class': 'h5p-grid h5p-units h5p-mini-course-units'
     });
 
     this.elements =[];
   }
 
   getElement() {
-    return this.$grid;
+    return this.$container;
   }
 
   add(courseUnit) {
 
-    //courseUnit.appendTo(this.$grid);
+    //courseUnit.appendTo(this.$container);
     //
     const gridElement = new GridUnit(courseUnit);
     this.elements.push(gridElement);
     const $domElement = gridElement.getDomElement();
-    $domElement.appendTo(this.$grid);
+    $domElement.appendTo(this.$container);
     //courseUnit.setDomElement($domElement);
     //
     super.add(courseUnit);

@@ -3,7 +3,7 @@
   "description": "Mini course consisting of lessons",
   "machineName": "H5P.MiniCourse",
   "majorVersion": 1,
-  "minorVersion": 0,
+  "minorVersion": 1,
   "patchVersion": 0,
   "runnable": 1,
   "embedTypes": [

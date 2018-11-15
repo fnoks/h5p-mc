@@ -6,6 +6,8 @@ import "../styles/popup.css";
 import "../styles/progress-circle.css";
 import "../styles/summary.css";
 
+import '../styles/linear-layout.css';
+
 import MiniCourse from "../scripts/MiniCourse.js";
 
 // Load library

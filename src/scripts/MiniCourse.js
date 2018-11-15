@@ -55,6 +55,9 @@ export default class MiniCourse extends H5P.EventDispatcher {
       'class': 'h5p-mini-course-fullscreen-button enter',
       click: function () {
         H5P.semiFullScreen(self.$container, self);
+        /*const maxHeight = self.$container.height();
+        self.$container.css('height', maxHeigh
+        renderer.goFullscreen(maxHeight);*/
       }
     }));
     // Add minimize fullscreen icon:
@@ -79,13 +82,13 @@ export default class MiniCourse extends H5P.EventDispatcher {
     var score = new ProgressCircle(maxScore, 'Your Score', false);
     var progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
 
-    var currentPlacement;
+    /*var currentPlacement;
     var placementExceptions = {};
     if (options.layout.resultsPlacement.exceptions) {
       options.layout.resultsPlacement.exceptions.forEach(function (exception) {
         placementExceptions[exception.columns] = exception.placement;
       });
-    }
+    }*/
 
     self.on('enterFullScreen', function () {
       fullscreen = true;
@@ -185,9 +188,10 @@ export default class MiniCourse extends H5P.EventDispatcher {
 
       //updateResultsPlacement(placementExceptions[columns] ? placementExceptions[columns] : options.layout.resultsPlacement.default)
 
-      if (currentPlacement === 'right' || currentPlacement === 'left') {
+      //if (currentPlacement === 'right' || currentPlacement === 'left') {
         $results.css('min-height', $results.parent().height() + 'px');
-      }
+        $unitPanel.css('height', $results.parent().height() + 'px');
+      //}
 
       updateFullScreenButtonVisibility();
     };

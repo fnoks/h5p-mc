@@ -58,9 +58,9 @@
 .results-placement-top .h5p-mini-course-result-panel {
   width: 30%;
 }
-.results-placement-top .h5p-mini-course-units {
+/*.results-placement-top .h5p-mini-course-units {
   width: 100%;
-}
+}*/
 .h5p-mini-course-results {
   display: inline-block;
   background-color: #1C1D21;
@@ -94,7 +94,12 @@
   box-sizing: border-box;
   float: left;
   width: calc(100% - 12em);
+}
+.h5p-mini-course-units.finished {
+  opacity: 0;
+}
 
+.h5p-grid {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -111,9 +116,7 @@
   -webkit-align-content: flex-end;
   align-content: flex-end;
 }
-.h5p-mini-course-units.finished {
-  opacity: 0;
-}
+
 /*.h5p-mini-course-endscreen {
   font-size: 1.5em;
   text-align: center;

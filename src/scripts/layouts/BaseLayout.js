@@ -17,11 +17,17 @@ export default class BaseLayout extends H5P.EventDispatcher {
       courseUnit.enable();
     }*/
 
-    courseUnit.enable();
+    //courseUnit.enable();
     this.enable(0);
   }
 
   getMaxScore() {
     return this.maxScore;
+  }
+
+  goFullscreen() {
+    //const parentHeight = this.$grid.parent().height();
+    const gridHeight = this.$container.height();
+    this.$container.css('height', `${gridHeight}px`);
   }
 }

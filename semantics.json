@@ -1,5 +1,25 @@
 [
   {
+    "name": "layoutEngine",
+    "type": "select",
+    "label": "Layout",
+    "options": [
+      {
+        "value": "grid",
+        "label": "Grid"
+      },
+      {
+        "value": "linear",
+        "label": "Linear"
+      },
+      {
+        "value": "pages",
+        "label": "Pages"
+      }
+    ],
+    "default": "grid"
+  },
+  {
     "name": "units",
     "type": "list",
     "entity": "course unit",
