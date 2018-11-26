@@ -1,16 +1,15 @@
 import PopupLayout from './PopupLayout';
 import Options from '../Options';
 import Dictionary from '../Dictionary';
+import CourseUnit from '../CourseUnit';
 
 const $ = H5P.jQuery;
 
 class UnitHeader {
 
-  constructor(maxScore) {
+  constructor(hasScore, maxScore) {
 
     var self = this;
-    // States: ready, completed
-    var hasScore = !!maxScore;
 
     var $element = $('<div>', {
       'class': 'h5p-mini-course-unit-header'
@@ -30,7 +29,16 @@ class UnitHeader {
 
     self.setState = function (state, score) {
       $label.text(hasScore ? (state === 'ready' ? Dictionary.get('maxScoreLabel') : Dictionary.get('youGotLabel')) : Dictionary.get('infoLessonLabel'));
-      $value.text(hasScore ? (state === 'ready' ? maxScore + ' points' : score + ' of ' + maxScore + ' points') : Dictionary.get('infoLessonValue'));
+
+      let value = ''
+      if (!hasScore) {
+        value = Dictionary.get('infoLessonValue');
+      }
+      else {
+        value = state === 'ready' ? maxScore + ' points' : score + ' of ' + maxScore + ' points';
+      }
+
+      $value.text(value);
     };
 
     // Initial setups
@@ -38,9 +46,9 @@ class UnitHeader {
   }
 }
 
-class GridUnit extends H5P.EventDispatcher {
-  constructor(courseUnit) {
-    super();
+class GridUnit extends CourseUnit {
+  constructor(options, index) {
+    super(options, index);
 
     this.enabled = false;
 
@@ -49,21 +57,21 @@ class GridUnit extends H5P.EventDispatcher {
     });
 
     this.$unitPanelInner = $('<div>', {
-      'class': 'h5p-mini-course-unit-panel-inner ' + courseUnit.getMachineName(),
+      'class': 'h5p-mini-course-unit-panel-inner ' + this.getClassName(),
       tabIndex: 0
     }).appendTo(this.$unitPanel);
 
-    var unitHeader = new UnitHeader(courseUnit.getMaxScore());
-    unitHeader.getDomElement().appendTo(this.$unitPanelInner);
+    this.unitHeader = new UnitHeader(this.hasScore(), this.getMaxScore());
+    this.unitHeader.getDomElement().appendTo(this.$unitPanelInner);
 
     $('<div>', {
       'class': 'h5p-mini-course-unit-title',
-      html: courseUnit.getHeader()
+      html: this.getHeader()
     }).appendTo(this.$unitPanelInner);
 
     $('<div>', {
       'class': 'h5p-mini-course-unit-intro',
-      html: courseUnit.getIntro()
+      html: this.getIntro()
     }).appendTo(this.$unitPanelInner);
 
     this.$beginButton = $('<button>', {
@@ -89,8 +97,23 @@ class GridUnit extends H5P.EventDispatcher {
 
     setTimeout(() => this.$beginButton.focus(), 1);
   }
-}
 
+  done(score) {
+    if (score) {
+      this.unitHeader.setState('done', this.score);
+    }
+
+    this.$beginButton.html(Dictionary.get('lessonCompletedLabel')).attr('disabled', 'disabled');
+    this.$unitPanel.removeClass('enabled').addClass('done');
+  }
+
+  reset() {
+    super.reset();
+    this.$beginButton.html(Dictionary.get('lessonLockedLabel'));
+    //this.headerButton.skip();
+    this.$unitPanel.removeClass('done').addClass('locked');
+  }
+}
 
 export default class GridLayout extends PopupLayout {
 
@@ -100,35 +123,24 @@ export default class GridLayout extends PopupLayout {
     this.minimumWidth = Options.all().layout.minimumWidth;
 
     this.$container = $('<div>', {
-      'class': 'h5p-grid h5p-units h5p-mini-course-units'
+      'class': 'h5p-grid h5p-units'
     });
-
-    this.elements =[];
   }
 
   getElement() {
     return this.$container;
   }
 
-  add(courseUnit) {
-
-    //courseUnit.appendTo(this.$container);
-    //
-    const gridElement = new GridUnit(courseUnit);
-    this.elements.push(gridElement);
+  add(options, index) {
+    const gridElement = new GridUnit(options, index);
     const $domElement = gridElement.getDomElement();
     $domElement.appendTo(this.$container);
-    //courseUnit.setDomElement($domElement);
-    //
-    super.add(courseUnit);
-
-    gridElement.on('show', () => {
-      console.log('SHOWING!!');
-      this.show(courseUnit);
-    });
+    super.add(gridElement);
   }
 
   resize(width) {
+    super.resize();
+
     var columns = Math.floor(width / this.minimumWidth);
     columns = (columns === 0 ? 1 : columns);
 
@@ -139,24 +151,8 @@ export default class GridLayout extends PopupLayout {
 
     var columnsWidth = Math.floor(100 / columns);
 
-    // iterate course units:
-    //var widestUnit = 0;
-    this.elements.forEach(function (element) {
-      element.setWidth(columnsWidth);
-    });
-  }
-
-  reset() {
-    // Reset all units
     this.courseUnits.forEach(function (unit) {
-      unit.reset();
+      unit.setWidth(columnsWidth);
     });
-
-    // Enable first unit:
-    //this.courseUnits[0].enable();
-  }
-
-  enable(index) {
-    this.elements[index].enable();
   }
 }

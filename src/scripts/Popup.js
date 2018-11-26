@@ -2,11 +2,11 @@ const $ = H5P.jQuery;
 
 export default class Popup extends H5P.EventDispatcher {
 
-  static popup($container) {
-    if (Popup.instance === undefined) {
-      Popup.instance = new Popup(100, $container);
-    }
+  static setup($container) {
+    Popup.instance = new Popup(100, $container);
+  }
 
+  static getInstance() {
     return Popup.instance;
   }
 
@@ -35,8 +35,8 @@ export default class Popup extends H5P.EventDispatcher {
         $popup.addClass(popupClass);
         currentPopupClass = popupClass;
       }
-      $container.append($popupBg);
 
+      $container.append($popupBg);
       $popupBg.addClass('visible');
 
       setTimeout(function () {
@@ -44,8 +44,31 @@ export default class Popup extends H5P.EventDispatcher {
       }, 200);
     };
 
-    self.hide = function () {
+    self.replace = function ($elements, popupClass) {
+      $popup.removeClass('visible');
 
+      setTimeout(() => {
+        $popup.children().detach();
+
+        $elements.forEach(function ($element) {
+          $popup.append($element);
+        });
+
+        if (popupClass) {
+          $popup.addClass(popupClass);
+          currentPopupClass = popupClass;
+        }
+
+        $popup.addClass('visible');
+      }, 600);
+
+      //$container.append($popupBg);
+      //$popupBg.addClass('visible');
+
+      //setTimeout(() => {$popup.addClass('visible')}, 200);
+    };
+
+    self.hide = function () {
       $popup.removeClass('visible');
       $popupBg.removeClass('visible');
 
@@ -54,11 +77,13 @@ export default class Popup extends H5P.EventDispatcher {
           $popup.removeClass(currentPopupClass);
           currentPopupClass = undefined;
         }
-        $popup.empty();
+        $popup.children().detach();
         $popupBg.detach();
 
       }, 1000);
     };
+
+    self.getDomElement = () => {return $popup};
 
     // The close button
     $('<div>', {

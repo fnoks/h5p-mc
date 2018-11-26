@@ -31,20 +31,14 @@ export default class MiniCourse extends H5P.EventDispatcher {
     });
 
     var results = [];
-    var popup;
-    // Create course units
-    var renderer = LayoutFactory.getLayoutEngine();
-
     var numUnits = options.units.length;
 
-    // TODO do this in a function
+    var renderer = LayoutFactory.getLayoutEngine();
     options.units.forEach(function (unit, index) {
-      var courseUnit = new CourseUnit(unit, index);
-      renderer.add(courseUnit);
+      renderer.add(unit, index);
     });
 
     $unitPanel.append(renderer.getElement());
-
     var maxScore = renderer.getMaxScore();
 
     var $results = $('<div>', {
@@ -54,6 +48,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
     $results.append($('<span>', {
       'class': 'h5p-mini-course-fullscreen-button enter',
       click: function () {
+        fullscreen = true;
         H5P.semiFullScreen(self.$container, self);
         /*const maxHeight = self.$container.height();
         self.$container.css('height', maxHeigh
@@ -82,20 +77,29 @@ export default class MiniCourse extends H5P.EventDispatcher {
     var score = new ProgressCircle(maxScore, 'Your Score', false);
     var progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
 
-    /*var currentPlacement;
-    var placementExceptions = {};
-    if (options.layout.resultsPlacement.exceptions) {
-      options.layout.resultsPlacement.exceptions.forEach(function (exception) {
-        placementExceptions[exception.columns] = exception.placement;
-      });
-    }*/
+    renderer.on('scored', event => {
+      const result = event.data;
+
+      const previousResult = results[result.index];
+
+      if (previousResult) {
+        score.increment(-previousResult.score);
+      }
+
+      results[result.index] = result;
+      score.increment(result.score);
+    });
+    renderer.on('progress', event => progress.setCurrent(event.data.index));
+    renderer.on('finished', event => showSummary());
 
     self.on('enterFullScreen', function () {
+      this.$container.addClass('h5p-fullscreen');
       fullscreen = true;
     });
 
     // Respond to exit full screen event
     self.on('exitFullScreen', function () {
+      this.$container.removeClass('h5p-fullscreen');
       fullscreen = false;
     });
 
@@ -111,48 +115,30 @@ export default class MiniCourse extends H5P.EventDispatcher {
     });
 
     self.reset = function () {
+      results = [];
       progress.reset();
       score.reset();
       renderer.reset();
 
-      //$endScreen.removeClass('visible');
       setTimeout(function () {
         $unitPanel.removeClass('finished');
       }, 600);
     };
 
-
-    var showPopup = function ($elements, extraClass) {
-      popup.show($elements, extraClass);
-      /*$popupBg.append($content).appendTo(self.$container);
-      setTimeout(function () {
-        $popupBg.addClass('visible');
-      }, 200);*/
-    };
-
-    var showSummary = function () {
-      // Create summary page:
-
-      for (var i = 2; i < 50; i++) {
-        results[i] = {
-          title: 'tittel',
-          score: 10,
-          maxScore: 20
-        };
-      }
+    var showSummary = () => {
       var summary = new Summary(score.getScore(), maxScore, results);
       var $summaryElement = summary.getElement();
 
-      summary.on('retry', function () {
-        popup.hide();
+      summary.on('retry', () => {
+        Popup.getInstance().hide();
         $summaryElement.detach();
         self.reset();
       });
 
-      showPopup([$summaryElement], 'summary');
+      Popup.getInstance().replace([$summaryElement], 'summary');
     };
 
-    var updateFullScreenButtonVisibility = function () {
+    var updateFullScreenButtonVisibility = () => {
       // If already in full screen, do nothing
       if (fullscreen) {
         return;
@@ -170,40 +156,16 @@ export default class MiniCourse extends H5P.EventDispatcher {
     };
 
     self.resize = () => {
-
-      // If popup is showing
-
-      // self.$container.css('min-height', '600px');
-
-      // If results widget is on top, we need to place it on right side to check
-      // how many columns there will be
-      $results.css('min-height', '');
-      //updateResultsPlacement(options.layout.resultsPlacement.default);
-
+      $unitPanel.css('min-height', '');
       var width = Math.floor($unitPanel.innerWidth());
-
-      console.log(width);
-
       renderer.resize(width);
 
-      //updateResultsPlacement(placementExceptions[columns] ? placementExceptions[columns] : options.layout.resultsPlacement.default)
+      const minHeight = $results.parent().height() + 'px';
 
-      //if (currentPlacement === 'right' || currentPlacement === 'left') {
-        $results.css('min-height', $results.parent().height() + 'px');
-        $unitPanel.css('height', $results.parent().height() + 'px');
-      //}
-
-      updateFullScreenButtonVisibility();
+      $results.css('min-height', minHeight);
+      $unitPanel.css(fullscreen ? 'height' : 'min-height', minHeight);
     };
     self.on('resize', self.resize);
-
-    /*function updateResultsPlacement(placement) {
-      if (currentPlacement) {
-        self.$container.removeClass('results-placement-' + currentPlacement);
-      }
-      self.$container.addClass('results-placement-' + placement);
-      currentPlacement = placement;
-    }*/
 
     /**
      * Attach to container
@@ -212,15 +174,12 @@ export default class MiniCourse extends H5P.EventDispatcher {
      */
     self.attach = ($container) => {
       self.$container = $container;
-      popup = Popup.popup(self.$container); // TODO - use options - or remove this z-index thingy??
+      Popup.setup($container);
 
       // Something strange about the order here:
       score.appendTo($scorePanel);
       progress.appendTo($progressPanel);
-
       $results.appendTo($container);
-
-      //courseUnits[0].enable();
       $unitPanel.appendTo($container);
       $fullscreenOverlay.appendTo($container);
 

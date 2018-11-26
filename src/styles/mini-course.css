@@ -94,6 +94,7 @@
   box-sizing: border-box;
   float: left;
   width: calc(100% - 12em);
+  position: relative;
 }
 .h5p-mini-course-units.finished {
   opacity: 0;
@@ -189,4 +190,8 @@ button.h5p-mini-course-unit-retry {
 
 .h5p-grid {
   width: 100%;
+}
+
+.h5p-fullscreen .h5p-mini-course-units {
+  overflow-x: auto;
 }

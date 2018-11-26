@@ -17,6 +17,9 @@
   vertical-align: baseline;
   line-height: 1;
 }*/
+.h5p-mini-course-unit-panel.enabled .h5p-mini-course-unit-panel-inner {
+  border: 2px solid #2657a4;
+}
 .h5p-mini-course-unit-panel-inner {
   padding: 1em;
   border: 1px solid #ddd;
@@ -105,9 +108,7 @@
 }
 
 button.h5p-mini-course-unit-begin:focus {
-  outline-style: dashed;
-  outline-width: 1px;
-  outline-offset: 1px;
+
 }
 button.h5p-mini-course-unit-begin:hover {
   border-radius: 0;
@@ -136,17 +137,10 @@ button.h5p-mini-course-unit-begin:hover {
 }
 
 .h5p-sub-content {
+  /*-webkit-backface-visibility: hidden;
+  backface-visibility: hidden;*/
   width: 100%;
   padding: 2em;
   box-sizing: border-box;
   height: auto;
-  border-radius: 0 0 2em 2em;
-}
-.h5p-sub-content.h5p-interactive-video {
-  padding: 0;
-}
-
-/* Remove fullscreen-buttons */
-.h5p-sub-content.h5p-interactive-video .h5p-control.h5p-fullscreen {
-  display: none;
 }

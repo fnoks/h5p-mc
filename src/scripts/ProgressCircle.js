@@ -20,6 +20,11 @@ export default class ProgressCircle {
     var self = this;
     var currentScore = 0;
 
+    self.setCurrent = function (newScore) {
+      currentScore = newScore;
+      updateUI();
+    }
+
     self.increment = function (score) {
       currentScore += score || 1;
       updateUI();

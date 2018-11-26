@@ -16,6 +16,7 @@ class HeaderButton extends H5P.EventDispatcher {
     var $action = $('<a>', {
       'class': 'header-button skip-lesson',
       'text': Dictionary.get('skipLabel'),
+      tabindex: 0,
       click: function () {
         self.trigger(state);
       }
@@ -39,37 +40,33 @@ class HeaderButton extends H5P.EventDispatcher {
     self.continue = function () {
       self.setState('continue');
     };
+
+    self.focus = function () {
+      $action.focus();
+    };
   }
 }
 
 export default class PopupLayout extends BaseLayout {
   constructor() {
     super();
-
-    this.popup = new Popup();
   }
 
   add(courseUnit) {
     super.add(courseUnit);
 
-    //courseUnit.on('open-popup', (event) => {
-      //showPopup(event.data.popupContent);
-      //this.trigger('open-popup', event);
+    /*var progressedEvent = self.createXAPIEventTemplate('progressed');
+    progressedEvent.data.statement.object.definition.extensions['http://id.tincanapi.com/extension/ending-point'] = event.data.index + 1;
+    self.trigger(progressedEvent);*/
 
+    courseUnit.on('show', () => {
+      this.show(courseUnit);
+    });
 
-      /*var progressedEvent = self.createXAPIEventTemplate('progressed');
-      progressedEvent.data.statement.object.definition.extensions['http://id.tincanapi.com/extension/ending-point'] = event.data.index + 1;
-      self.trigger(progressedEvent);*/
-    //});
-
-    // TODO - handle this in a function
-    courseUnit.on('finished', (event) => {
+    /*courseUnit.on('finished', (event) => {
 
       self.$container.css('min-height', '');
       this.trigger('resize');
-
-      //$popupBg.removeClass('visible');
-      //$popupBg.detach();
 
       courseUnit.done();
       progress.increment();
@@ -90,19 +87,24 @@ export default class PopupLayout extends BaseLayout {
       else {
         showSummary();
       }
-    });
+    });*/
 
-    courseUnit.on('closing-popup', function () {
+    //courseUnit.on('closing-popup', function () {
       //$popupBg.removeClass('visible');
-      popup.hide();
-    });
+      //popup.hide();
+    //});
+  }
+
+  canContinue() {
+    this.headerButton.continue();
   }
 
   show(courseUnit) {
-    if (!this.enabled) {
+    if (!courseUnit.enabled) {
       return;
     }
 
+    this.headerButton = new HeaderButton();
     const instance = courseUnit.getInstance();
     var $h5pContent = $('<div>', {
       'class': 'h5p-sub-content'
@@ -110,60 +112,40 @@ export default class PopupLayout extends BaseLayout {
 
     instance.attach($h5pContent);
 
-    var headerButton = new HeaderButton();
     if (!courseUnit.hasScore()) {
-      headerButton.continue();
+      this.headerButton.continue();
     }
 
     var $header = $('<div>', {
       'class': 'header',
       text: courseUnit.getHeader(),
-      append: self.headerButton.getDomElement()
+      append: this.headerButton.getDomElement()
     });
 
-    //$unitPopup.prepend($header);
-    //$
-    headerButton.on('skip', function () {
+    this.headerButton.on('skip', () => {
       var confirmDialog = new H5P.ConfirmationDialog({headerText: 'Are you sure?', dialogText: 'If quiting this lesson, no score will be given.'});
-      confirmDialog.appendTo($unitPopup.get(0));
-      confirmDialog.on('confirmed', function () {
-        self.hide();
-      });
+      confirmDialog.appendTo(Popup.getInstance().getDomElement().get(0));
+      confirmDialog.on('confirmed', () => this.hide());
       confirmDialog.show();
     });
 
-    self.headerButton.on('continue', function () {
-      self.hide(self.score);
-    });
+    this.headerButton.on('continue', () => this.hide());
 
+    Popup.getInstance().show([
+      $header,
+      $h5pContent
+    ], courseUnit.getClassName());
 
-    // Attach popup to body:
-    //$('body').append($unitPopupBg);
-    //$popupContainer.append($unitPopupBg);
+    setTimeout(() => {this.headerButton.focus()}, 400);
 
-    // Hide if ESC is pressed
-    /*$('body').on('keyup.h5p-escape', function (event) {
-      if (event.keyCode == 27) {
-        $unitPopup.find('.quit-lesson').click();
-      }
-    });*/
-
-    /*setTimeout(function () {
-      $unitPopup.addClass('visible');
-    }, 200);*/
-
-    self.trigger('open-popup', {
-      popupContent: [
-        $header,
-        $h5pContent
-      ],
-      index: index
-    });
-    instance.on('resize', function () {
-      self.trigger('resize');
-    });
     instance.trigger('resize');
-    self.trigger('resize');
   };
 
+  hide() {
+    if (!this.isLastLesson()) {
+      Popup.getInstance().hide();
+    }
+
+    this.enableNext();
+  }
 }

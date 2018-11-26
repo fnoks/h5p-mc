@@ -2,16 +2,22 @@
   position: absolute;
   z-index: 1;
   box-sizing: border-box;
-  width: 100%;
+  width: calc(100% - 12em);
   height: 100%;
   top: 0;
   left: 0;
   bottom: 0;
   background: rgba(0,0,0,0);
-  transition: all 1s;
+  transition: top 1s, background 1s;
+  transform-style: preserve-3d;
+}
+@media only screen and (max-width: 850px) {
+  .h5p-mini-course-popup-bg {
+    width: 100%;
+  }
 }
 .h5p-mini-course-popup-bg.visible {
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.75);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
@@ -20,22 +26,23 @@
   backface-visibility: hidden;
   position: relative;
   top: -100%;
-  /*left: 2.5rem;*/
-  /*-webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);*/
-  transform: perspective(1px) translate3d( 0, 0, 0) translateY(-50%);
-  max-width: 700px;
+  /*transform: perspective(1px) translate3d( 0, 0, 0) translateY(-50%);*/
+  transform: translateY(-50%) scale(1.0, 1.0);
+  width: 800px;
   min-height: 250px;
+  max-width: calc(100% - 2em);
+  max-height: calc(100% - 2em);
   margin: 0 auto;
   box-sizing: border-box;
   box-shadow: 0 0 30px rgba(0,0,0,0.08);
   background-color: #fff;
-  border-radius: 2em;
+  border-radius: 1em;
   overflow: hidden; /*TODO - Do we need this? */
   transition: top 0.5s;
 }
 .h5p-mini-course-popup.summary {
-  height: 80%;
+  height: 600px;
+  max-height: calc(100% - 2em);
 }
 .h5p-mini-course-popup.visible {
   top: 50%;

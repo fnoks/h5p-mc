@@ -2,12 +2,35 @@
   display: none;
 }
 
-
 /* Make some content types scrollable */
 .h5p-mini-course-popup.h5p-advancedtext {
-  max-height: 95%;
-
+  max-height: 600px;
 }
-.h5p-mini-course-popup.h5p-advancedtext .h5p-sub-content {
+.h5p-sub-content.h5p-advancedtext {
+  max-height: 500px;
   overflow-x: auto;
+}
+
+.h5p-mini-course-popup.h5p-interactive-video/*,
+.h5p-mini-course-popup.h5p-course-presentation*/ {
+  width: 900px
+}
+
+.h5p-sub-content.h5p-interactive-video,
+.h5p-sub-content.h5p-course-presentation,
+.h5p-sub-content.h5p-documentation-tool {
+  padding: 0;
+}
+
+/* Remove fullscreen-buttons */
+.h5p-sub-content.h5p-course-presentation .h5p-footer-toggle-full-screen,
+.h5p-sub-content.h5p-interactive-video .h5p-control.h5p-fullscreen {
+  display: none;
+}
+
+.h5p-mini-course-popup .h5p-confirmation-dialog-background {
+  background: rgba(255, 255, 255, 0.75);
+}
+.h5p-sub-content .h5p-confirmation-dialog-exit {
+  display: none;
 }
