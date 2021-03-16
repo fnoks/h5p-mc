@@ -24,17 +24,12 @@
     "type": "list",
     "entity": "course unit",
     "label": "Course units",
-    "widgets": [
-      {
-        "name": "VerticalTabs",
-        "label": "Default"
-      }
-    ],
     "min": 1,
     "defaultNum": 1,
     "field": {
       "name": "unit",
       "type": "group",
+      "expanded": false,
       "label": "Unit",
       "fields": [
         {
