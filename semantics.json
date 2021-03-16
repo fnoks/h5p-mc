@@ -3,6 +3,7 @@
     "name": "layoutEngine",
     "type": "select",
     "label": "Layout",
+    "widget": "none",
     "options": [
       {
         "value": "grid",
