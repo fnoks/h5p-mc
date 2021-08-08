@@ -162,15 +162,35 @@ export default class MiniCourse extends H5P.EventDispatcher {
     };
 
     self.resize = () => {
-      $unitPanel.css('min-height', '');
+      $unitPanel.css({ 'height': '', 'min-height': '' });
+      $results.css('height', '');
       var width = Math.floor($unitPanel.innerWidth());
       renderer.resize(width);
 
+      if (fullscreen) {
+        setTimeout(() => {
+          self.setPanelSize();
+        }, 0); // height values in panels needs to be reset in DOM
+      }
+      else {
+        self.setPanelSize();
+      }
+    };
+
+    /**
+     * Set panel size.
+     */
+    self.setPanelSize = () => {
       const minHeight = $results.parent().height() + 'px';
 
-      $results.css('min-height', minHeight);
+      if ($results.css('min-height') === '0px') {
+        $results.css('min-height', minHeight);
+      }
+      $results.css('height', minHeight);
+
       $unitPanel.css(fullscreen ? 'height' : 'min-height', minHeight);
     };
+
     self.on('resize', self.resize);
 
     /**
