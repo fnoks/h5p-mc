@@ -26,7 +26,7 @@ export default class ProgressCircle {
     }
 
     self.increment = function (score) {
-      currentScore += score || 1;
+      currentScore += (typeof score === 'number') ? score : 1;
       updateUI();
     };
 
