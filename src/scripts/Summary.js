@@ -3,7 +3,7 @@ const $ = H5P.jQuery;
 
 export default class Summary extends H5P.EventDispatcher {
 
-  constructor(score, maxScore, lessonResults) {
+  constructor(params = {}) {
     super();
 
     const self = this;
@@ -14,28 +14,34 @@ export default class Summary extends H5P.EventDispatcher {
     // Header
     $element.append($('<div>', {
       'class': 'h5p-mini-course-summary-header',
-      text: 'You have completed the mini course!' // TODO
+      text: params.l10n.header
     }));
 
+    const messageOverallResult = params.l10n.overallResult
+      .replace('%score', params.score)
+      .replace('%maxScore', params.maxScore);
+
     // Create scorebar:
-    var scoreBar = H5P.JoubelUI.createScoreBar(maxScore, 'LABEL TODO');
+    var scoreBar = H5P.JoubelUI.createScoreBar(params.maxScore, messageOverallResult);
 
     scoreBar.appendTo($element);
     setTimeout(function () {
-      scoreBar.setScore(score);
+      scoreBar.setScore(params.score);
     }, 0);
     // Greeting
     $element.append($('<div>', {
       'class': 'h5p-mini-course-summary-greeting',
-      text: 'You won 250 of 300 points!' // TODO
+      text: messageOverallResult
     }));
 
     // Add detailed results
     var $detailedResults = $('<div>', {
       'class': 'h5p-mini-course-summary-lesson-results'
     });
-    lessonResults.forEach(function (result) {
-      var score = result.score ? (result.score + '/' + result.maxScore) : 'No score'; // TODO
+    params.results.forEach(function (result) {
+      var score = (typeof result.score === 'number') ?
+        (result.score + '/' + result.maxScore) :
+        params.l10n.noScore;
 
       $detailedResults.append($('<div>', {
         'class': 'h5p-mini-course-summary-lesson-result',
@@ -47,7 +53,7 @@ export default class Summary extends H5P.EventDispatcher {
     // Retry button
     $element.append(H5P.JoubelUI.createButton({
       'class': 'h5p-mini-course-unit-retry',
-      text: 'Try again', // TODO - translate
+      text: params.l10n.tryAgain,
       click: function () {
         self.trigger('retry');
       }

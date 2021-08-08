@@ -369,6 +369,16 @@
             "name": "lessonPrefixLabel",
             "type": "text",
             "default": "Lesson %lessonIndex"
+          },
+          {
+            "name": "tryAgain",
+            "type": "text",
+            "default": "Try again"
+          },
+          {
+            "name": "noScore",
+            "type": "text",
+            "default": "No score"
           }
         ]
       }

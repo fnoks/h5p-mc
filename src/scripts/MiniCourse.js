@@ -127,7 +127,12 @@ export default class MiniCourse extends H5P.EventDispatcher {
     };
 
     var showSummary = () => {
-      var summary = new Summary(score.getScore(), maxScore, results);
+      var summary = new Summary({
+        score: score.getScore(),
+        maxScore: maxScore,
+        results: results,
+        l10n: options.dictionary.summary
+      });
       var $summaryElement = summary.getElement();
 
       summary.on('retry', () => {
