@@ -25,6 +25,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
 
     Dictionary.fill(options.dictionary);
     Options.fill(options, contentId);
+    options = Options.sanitize(options);
 
     var $unitPanel = $('<div>', {
       'class': 'h5p-mini-course-units'
