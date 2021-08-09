@@ -5,9 +5,9 @@ const $ = H5P.jQuery;
 export default class MaxScoreWidget {
 
   constructor(maxScore) {
-    var self = this;
+    const self = this;
 
-    var $element = $('<div>', {
+    const $element = $('<div>', {
       'class': 'h5p-mini-course-max-score-widget h5p-mini-course-result-panel',
       'html':
         '<div class="max-score-widget-title">' + Dictionary.get('maxScoreLabel') + '</div>' +

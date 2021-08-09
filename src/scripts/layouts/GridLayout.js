@@ -9,17 +9,17 @@ class UnitHeader {
 
   constructor(hasScore, maxScore) {
 
-    var self = this;
+    const self = this;
 
-    var $element = $('<div>', {
+    const $element = $('<div>', {
       'class': 'h5p-mini-course-unit-header'
     });
 
-    var $label = $('<div>', {
+    const $label = $('<div>', {
       'class': 'h5p-mini-course-unit-header-label'
     }).appendTo($element);
 
-    var $value = $('<div>', {
+    const $value = $('<div>', {
       'class': 'h5p-mini-course-unit-header-value'
     }).appendTo($element);
 
@@ -141,7 +141,7 @@ export default class GridLayout extends PopupLayout {
   resize(width) {
     super.resize();
 
-    var columns = Math.floor(width / this.minimumWidth);
+    let columns = Math.floor(width / this.minimumWidth);
     columns = (columns === 0 ? 1 : columns);
 
     // If more place, and single row, fill it up
@@ -149,7 +149,7 @@ export default class GridLayout extends PopupLayout {
       columns = this.courseUnits.length;
     }
 
-    var columnsWidth = Math.floor(100 / columns);
+    const columnsWidth = Math.floor(100 / columns);
 
     this.courseUnits.forEach(function (unit) {
       unit.setWidth(columnsWidth);

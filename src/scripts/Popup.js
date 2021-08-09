@@ -13,17 +13,17 @@ export default class Popup extends H5P.EventDispatcher {
   constructor(popupZIndex, $container) {
     super();
 
-    var self = this;
-    var currentPopupClass;
+    const self = this;
+    let currentPopupClass;
 
     // The semi-transparent background
-    var $popupBg = $('<div>', {
+    const $popupBg = $('<div>', {
       'class': 'h5p-mini-course-popup-bg',
       zIndex: popupZIndex
     });
 
     // the popup container
-    var $popup = $('<div>', {
+    const $popup = $('<div>', {
       'class': 'h5p-mini-course-popup' /* + machineName*/
     }).appendTo($popupBg);
 

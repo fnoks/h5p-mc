@@ -8,12 +8,12 @@ class HeaderButton extends H5P.EventDispatcher {
 
   constructor() {
     super();
-    var self = this;
+    const self = this;
 
-    var state = 'skip';
+    let state = 'skip';
 
     // Create dom element
-    var $action = $('<a>', {
+    const $action = $('<a>', {
       'class': 'header-button skip-lesson',
       'text': Dictionary.get('skipLabel'),
       tabindex: 0,
@@ -55,7 +55,7 @@ export default class PopupLayout extends BaseLayout {
   add(courseUnit) {
     super.add(courseUnit);
 
-    /*var progressedEvent = self.createXAPIEventTemplate('progressed');
+    /*const progressedEvent = self.createXAPIEventTemplate('progressed');
     progressedEvent.data.statement.object.definition.extensions['http://id.tincanapi.com/extension/ending-point'] = event.data.index + 1;
     self.trigger(progressedEvent);*/
 
@@ -106,7 +106,7 @@ export default class PopupLayout extends BaseLayout {
 
     this.headerButton = new HeaderButton();
     const instance = courseUnit.getInstance();
-    var $h5pContent = $('<div>', {
+    const $h5pContent = $('<div>', {
       'class': 'h5p-sub-content'
     });
 
@@ -116,14 +116,14 @@ export default class PopupLayout extends BaseLayout {
       this.headerButton.continue();
     }
 
-    var $header = $('<div>', {
+    const $header = $('<div>', {
       'class': 'header',
       text: courseUnit.getHeader(),
       append: this.headerButton.getDomElement()
     });
 
     this.headerButton.on('skip', () => {
-      var confirmDialog = new H5P.ConfirmationDialog({headerText: 'Are you sure?', dialogText: 'If quiting this lesson, no score will be given.'});
+      const confirmDialog = new H5P.ConfirmationDialog({headerText: 'Are you sure?', dialogText: 'If quiting this lesson, no score will be given.'});
       confirmDialog.appendTo(Popup.getInstance().getDomElement().get(0));
       confirmDialog.on('confirmed', () => this.hide());
       confirmDialog.show();

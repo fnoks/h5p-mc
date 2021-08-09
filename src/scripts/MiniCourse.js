@@ -19,33 +19,33 @@ export default class MiniCourse extends H5P.EventDispatcher {
    */
   constructor(options, contentId, contentData) {
     super();
-    var self = this;
+    const self = this;
 
-    var fullscreen = false;
+    let fullscreen = false;
 
     Dictionary.fill(options.dictionary);
     Options.fill(options, contentId);
     options = Options.sanitize(options);
 
-    var $unitPanel = $('<div>', {
+    const $unitPanel = $('<div>', {
       'class': 'h5p-mini-course-units',
       'css': {
         'background-color': options.theme.backgroundColorUnits
       }
     });
 
-    var results = [];
-    var numUnits = options.units.length;
+    let results = [];
+    const numUnits = options.units.length;
 
-    var renderer = LayoutFactory.getLayoutEngine();
+    const renderer = LayoutFactory.getLayoutEngine();
     options.units.forEach(function (unit, index) {
       renderer.add(unit, index);
     });
 
     $unitPanel.append(renderer.getElement());
-    var maxScore = renderer.getMaxScore();
+    const maxScore = renderer.getMaxScore();
 
-    var $results = $('<div>', {
+    const $results = $('<div>', {
       'class': 'h5p-mini-course-results',
       'css': {
         'background-color': options.theme.backgroundColorResults
@@ -70,19 +70,19 @@ export default class MiniCourse extends H5P.EventDispatcher {
       }
     }));
 
-    var maxScoreWidget = new MaxScoreWidget(maxScore);
+    const maxScoreWidget = new MaxScoreWidget(maxScore);
     maxScoreWidget.getElement().appendTo($results);
 
-    var $scorePanel = $('<div>', {
+    const $scorePanel = $('<div>', {
       'class': 'h5p-mini-course-score h5p-mini-course-result-panel'
     }).appendTo($results);
 
-    var $progressPanel = $('<div>', {
+    const $progressPanel = $('<div>', {
       'class': 'h5p-mini-course-progress h5p-mini-course-result-panel'
     }).appendTo($results);
 
-    var score = new ProgressCircle(maxScore, 'Your Score', false);
-    var progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
+    const score = new ProgressCircle(maxScore, 'Your Score', false);
+    const progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
 
     renderer.on('scored', event => {
       const result = event.data;
@@ -110,7 +110,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
       fullscreen = false;
     });
 
-    var $fullscreenOverlay = $('<div>', {
+    const $fullscreenOverlay = $('<div>', {
       'class': 'h5p-mini-course-overlay',
       html: '<div class="h5p-mini-course-go-fullscreen">Open mini course</div>',
       click: function () {
@@ -132,14 +132,14 @@ export default class MiniCourse extends H5P.EventDispatcher {
       }, 600);
     };
 
-    var showSummary = () => {
-      var summary = new Summary({
+    const showSummary = () => {
+      const summary = new Summary({
         score: score.getScore(),
         maxScore: maxScore,
         results: results,
         l10n: options.dictionary.summary
       });
-      var $summaryElement = summary.getElement();
+      const $summaryElement = summary.getElement();
 
       summary.on('retry', () => {
         Popup.getInstance().hide();
@@ -150,13 +150,13 @@ export default class MiniCourse extends H5P.EventDispatcher {
       Popup.getInstance().replace([$summaryElement], 'summary');
     };
 
-    var updateFullScreenButtonVisibility = () => {
+    const updateFullScreenButtonVisibility = () => {
       // If already in full screen, do nothing
       if (fullscreen) {
         return;
       }
 
-      var forceFullscreen = false;
+      let forceFullscreen = false;
       if (options.layout.fullScreen.fullScreenMode === 'always') {
         forceFullscreen = true;
       }
@@ -170,7 +170,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
     self.resize = () => {
       $unitPanel.css({ 'height': '', 'min-height': '' });
       $results.css('height', '');
-      var width = Math.floor($unitPanel.innerWidth());
+      const width = Math.floor($unitPanel.innerWidth());
       renderer.resize(width);
 
       if (fullscreen) {

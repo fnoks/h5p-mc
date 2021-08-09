@@ -22,7 +22,7 @@ export default class Summary extends H5P.EventDispatcher {
       .replace('%maxScore', params.maxScore);
 
     // Create scorebar:
-    var scoreBar = H5P.JoubelUI.createScoreBar(params.maxScore, messageOverallResult);
+    const scoreBar = H5P.JoubelUI.createScoreBar(params.maxScore, messageOverallResult);
 
     scoreBar.appendTo($element);
     setTimeout(function () {
@@ -35,11 +35,11 @@ export default class Summary extends H5P.EventDispatcher {
     }));
 
     // Add detailed results
-    var $detailedResults = $('<div>', {
+    const $detailedResults = $('<div>', {
       'class': 'h5p-mini-course-summary-lesson-results'
     });
     params.results.forEach(function (result) {
-      var score = (typeof result.score === 'number') ?
+      const score = (typeof result.score === 'number') ?
         (result.score + '/' + result.maxScore) :
         params.l10n.noScore;
 

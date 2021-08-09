@@ -41,8 +41,8 @@ export default class CourseUnit extends H5P.EventDispatcher {
       this.instance = H5P.newRunnable(this.options.action, Options.contentId);
 
       this.instance.on('xAPI', event => {
-        var stmt = event.data.statement;
-        var isParent = (stmt.context.contextActivities.parent === undefined);
+        const stmt = event.data.statement;
+        const isParent = (stmt.context.contextActivities.parent === undefined);
         if (isParent && stmt.result !== undefined && stmt.result.completion === true &&
             stmt.result.score !== undefined && stmt.result.score.scaled !== undefined) {
 

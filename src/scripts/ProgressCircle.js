@@ -17,8 +17,8 @@ const progressTemplate = '<div class="radial-progress" data-progress="0">' +
 export default class ProgressCircle {
 
   constructor(totalScore, label, showTotal) {
-    var self = this;
-    var currentScore = 0;
+    const self = this;
+    let currentScore = 0;
 
     self.setCurrent = function (newScore) {
       currentScore = newScore;
@@ -65,12 +65,12 @@ export default class ProgressCircle {
       updateUI();
     };
 
-    var updateUI = function () {
+    const updateUI = function () {
       if (currentScore > totalScore) {
         currentScore = totalScore;
       }
 
-      var k = Math.ceil((currentScore/totalScore)*100) * 1.8;
+      const k = Math.ceil((currentScore/totalScore)*100) * 1.8;
 
       self.$fullAndFill.css('transform', 'rotate(' + k + 'deg)');
       self.$fillFix.css('transform', 'rotate(' + (k * 2) + 'deg)');
