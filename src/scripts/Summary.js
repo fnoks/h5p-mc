@@ -1,3 +1,4 @@
+import Dictionary from './Dictionary';
 
 const $ = H5P.jQuery;
 
@@ -9,7 +10,6 @@ export default class Summary extends H5P.EventDispatcher {
    * @param {number} params.score Score that was achieved.
    * @param {number} params.maxScore Maximum score achievable.
    * @param {object[]} params.results Results of tasks.
-   * @param {object} params.l10n Localization strings.
    */
   constructor(params = {}) {
     super();
@@ -23,10 +23,10 @@ export default class Summary extends H5P.EventDispatcher {
     // Header
     this.$element.append($('<div>', {
       'class': 'h5p-mini-course-summary-header',
-      text: this.params.l10n.header
+      text: Dictionary.get('summary').header
     }));
 
-    const messageOverallResult = this.params.l10n.overallResult
+    const messageOverallResult = Dictionary.get('summary').overallResult
       .replace('%score', this.params.score)
       .replace('%maxScore', this.params.maxScore);
 
@@ -50,7 +50,7 @@ export default class Summary extends H5P.EventDispatcher {
     this.params.results.forEach((result) => {
       const score = (typeof result.score === 'number') ?
         (result.score + '/' + result.maxScore) :
-        this.params.l10n.noScore;
+        Dictionary.get('summary').noScore;
 
       $detailedResults.append($('<div>', {
         'class': 'h5p-mini-course-summary-lesson-result',
@@ -62,7 +62,7 @@ export default class Summary extends H5P.EventDispatcher {
     // Retry button
     this.$element.append(H5P.JoubelUI.createButton({
       'class': 'h5p-mini-course-unit-retry',
-      text: this.params.l10n.tryAgain,
+      text: Dictionary.get('summary').tryAgain,
       click: () => {
         this.trigger('retry');
       }

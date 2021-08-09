@@ -144,8 +144,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
     const summary = new Summary({
       score: this.score.getScore(),
       maxScore: this.maxScore,
-      results: this.results,
-      l10n: this.options.dictionary.summary
+      results: this.results
     });
     const $summaryElement = summary.getElement();
 
