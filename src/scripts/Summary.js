@@ -6,30 +6,31 @@ export default class Summary extends H5P.EventDispatcher {
   constructor(params = {}) {
     super();
 
-    const self = this;
-    const $element = $('<div>', {
+    this.params = params;
+
+    this.$element = $('<div>', {
       'class': 'h5p-mini-course-summary'
     });
 
     // Header
-    $element.append($('<div>', {
+    this.$element.append($('<div>', {
       'class': 'h5p-mini-course-summary-header',
-      text: params.l10n.header
+      text: this.params.l10n.header
     }));
 
-    const messageOverallResult = params.l10n.overallResult
-      .replace('%score', params.score)
-      .replace('%maxScore', params.maxScore);
+    const messageOverallResult = this.params.l10n.overallResult
+      .replace('%score', this.params.score)
+      .replace('%maxScore', this.params.maxScore);
 
     // Create scorebar:
-    const scoreBar = H5P.JoubelUI.createScoreBar(params.maxScore, messageOverallResult);
+    const scoreBar = H5P.JoubelUI.createScoreBar(this.params.maxScore, messageOverallResult);
 
-    scoreBar.appendTo($element);
-    setTimeout(function () {
-      scoreBar.setScore(params.score);
+    scoreBar.appendTo(this.$element);
+    setTimeout(() => {
+      scoreBar.setScore(this.params.score);
     }, 0);
     // Greeting
-    $element.append($('<div>', {
+    this.$element.append($('<div>', {
       'class': 'h5p-mini-course-summary-greeting',
       text: messageOverallResult
     }));
@@ -38,29 +39,29 @@ export default class Summary extends H5P.EventDispatcher {
     const $detailedResults = $('<div>', {
       'class': 'h5p-mini-course-summary-lesson-results'
     });
-    params.results.forEach(function (result) {
+    this.params.results.forEach((result) => {
       const score = (typeof result.score === 'number') ?
         (result.score + '/' + result.maxScore) :
-        params.l10n.noScore;
+        this.params.l10n.noScore;
 
       $detailedResults.append($('<div>', {
         'class': 'h5p-mini-course-summary-lesson-result',
         html: '<span class="prefix">Lesson ' + result.index + '</span><span class="title">' + result.header + '</span><span class="score">' + score + '</span>'
       }));
     });
-    $element.append($detailedResults);
+    this.$element.append($detailedResults);
 
     // Retry button
-    $element.append(H5P.JoubelUI.createButton({
+    this.$element.append(H5P.JoubelUI.createButton({
       'class': 'h5p-mini-course-unit-retry',
-      text: params.l10n.tryAgain,
-      click: function () {
-        self.trigger('retry');
+      text: this.params.l10n.tryAgain,
+      click: () => {
+        this.trigger('retry');
       }
     }));
+  }
 
-    self.getElement = function () {
-      return $element;
-    };
+  getElement() {
+    return this.$element;
   }
 }

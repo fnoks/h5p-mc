@@ -8,41 +8,41 @@ const $ = H5P.jQuery;
 class UnitHeader {
 
   constructor(hasScore, maxScore) {
+    this.hasScore = hasScore;
+    this.maxScore = maxScore;
 
-    const self = this;
-
-    const $element = $('<div>', {
+    this.$element = $('<div>', {
       'class': 'h5p-mini-course-unit-header'
     });
 
-    const $label = $('<div>', {
+    this.$label = $('<div>', {
       'class': 'h5p-mini-course-unit-header-label'
-    }).appendTo($element);
+    }).appendTo(this.$element);
 
-    const $value = $('<div>', {
+    this.$value = $('<div>', {
       'class': 'h5p-mini-course-unit-header-value'
-    }).appendTo($element);
-
-    self.getDomElement = function () {
-      return $element;
-    };
-
-    self.setState = function (state, score) {
-      $label.text(hasScore ? (state === 'ready' ? Dictionary.get('maxScoreLabel') : Dictionary.get('youGotLabel')) : Dictionary.get('infoLessonLabel'));
-
-      let value = ''
-      if (!hasScore) {
-        value = Dictionary.get('infoLessonValue');
-      }
-      else {
-        value = state === 'ready' ? maxScore + ' points' : score + ' of ' + maxScore + ' points';
-      }
-
-      $value.text(value);
-    };
+    }).appendTo(this.$element);
 
     // Initial setups
-    self.setState('ready');
+    this.setState('ready');
+  }
+
+  getDomElement() {
+    return this.$element;
+  }
+
+  setState(state, score) {
+    this.$label.text(this.hasScore ? (state === 'ready' ? Dictionary.get('maxScoreLabel') : Dictionary.get('youGotLabel')) : Dictionary.get('infoLessonLabel'));
+
+    let value = ''
+    if (!this.hasScore) {
+      value = Dictionary.get('infoLessonValue');
+    }
+    else {
+      value = state === 'ready' ? this.maxScore + ' points' : score + ' of ' + this.maxScore + ' points';
+    }
+
+    this.$value.text(value);
   }
 }
 
@@ -151,7 +151,7 @@ export default class GridLayout extends PopupLayout {
 
     const columnsWidth = Math.floor(100 / columns);
 
-    this.courseUnits.forEach(function (unit) {
+    this.courseUnits.forEach((unit) => {
       unit.setWidth(columnsWidth);
     });
   }

@@ -13,82 +13,84 @@ export default class Popup extends H5P.EventDispatcher {
   constructor(popupZIndex, $container) {
     super();
 
-    const self = this;
-    let currentPopupClass;
+    this.$container = $container;
+    this.currentPopupClass;
 
     // The semi-transparent background
-    const $popupBg = $('<div>', {
+    this.$popupBg = $('<div>', {
       'class': 'h5p-mini-course-popup-bg',
       zIndex: popupZIndex
     });
 
     // the popup container
-    const $popup = $('<div>', {
+    this.$popup = $('<div>', {
       'class': 'h5p-mini-course-popup' /* + machineName*/
-    }).appendTo($popupBg);
-
-    self.show = function ($elements, popupClass) {
-      $elements.forEach(function ($element) {
-        $popup.append($element);
-      });
-      if (popupClass) {
-        $popup.addClass(popupClass);
-        currentPopupClass = popupClass;
-      }
-
-      $container.append($popupBg);
-      $popupBg.addClass('visible');
-
-      setTimeout(function () {
-        $popup.addClass('visible');
-      }, 200);
-    };
-
-    self.replace = function ($elements, popupClass) {
-      $popup.removeClass('visible');
-
-      setTimeout(() => {
-        $popup.children().detach();
-
-        $elements.forEach(function ($element) {
-          $popup.append($element);
-        });
-
-        if (popupClass) {
-          $popup.addClass(popupClass);
-          currentPopupClass = popupClass;
-        }
-
-        $popup.addClass('visible');
-      }, 600);
-
-      //$container.append($popupBg);
-      //$popupBg.addClass('visible');
-
-      //setTimeout(() => {$popup.addClass('visible')}, 200);
-    };
-
-    self.hide = function () {
-      $popup.removeClass('visible');
-      $popupBg.removeClass('visible');
-
-      setTimeout(function () {
-        if (currentPopupClass) {
-          $popup.removeClass(currentPopupClass);
-          currentPopupClass = undefined;
-        }
-        $popup.children().detach();
-        $popupBg.detach();
-
-      }, 1000);
-    };
-
-    self.getDomElement = () => {return $popup};
+    }).appendTo(this.$popupBg);
 
     // The close button
     $('<div>', {
       'class': 'h5p-mini-course-popup-close',
-      click: self.hide.bind(this)
-    }).appendTo($popup);
+      click: this.hide
+    }).appendTo(this.$popup);
+  }
+
+  show($elements, popupClass) {
+    $elements.forEach(($element) => {
+      this.$popup.append($element);
+    });
+    if (popupClass) {
+      this.$popup.addClass(popupClass);
+      this.currentPopupClass = popupClass;
+    }
+
+    this.$container.append(this.$popupBg);
+    this.$popupBg.addClass('visible');
+
+    setTimeout(() => {
+      this.$popup.addClass('visible');
+    }, 200);
+  }
+
+  replace($elements, popupClass) {
+    this.$popup.removeClass('visible');
+
+    setTimeout(() => {
+      this.$popup.children().detach();
+
+      $elements.forEach(($element) => {
+        this.$popup.append($element);
+      });
+
+      if (popupClass) {
+        this.$popup.addClass(popupClass);
+        this.currentPopupClass = popupClass;
+      }
+
+      this.$popup.addClass('visible');
+    }, 600);
+
+    //this.$container.append(this.$popupBg);
+    //this.$popupBg.addClass('visible');
+
+    //setTimeout(() => {this.$popup.addClass('visible')}, 200);
+  }
+
+  hide() {
+    this.$popup.removeClass('visible');
+    this.$popupBg.removeClass('visible');
+
+    setTimeout(() => {
+      if (this.currentPopupClass) {
+        this.$popup.removeClass(this.currentPopupClass);
+        this.currentPopupClass = undefined;
+      }
+      this.$popup.children().detach();
+      this.$popupBg.detach();
+
+    }, 1000);
+  }
+
+  getDomElement() {
+    return this.$popup;
   }
 }

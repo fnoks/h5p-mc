@@ -37,7 +37,7 @@ export default class BaseLayout extends H5P.EventDispatcher {
 
   reset() {
     // Reset all units
-    this.courseUnits.forEach(function (unit) {
+    this.courseUnits.forEach((unit) => {
       unit.reset();
     });
 

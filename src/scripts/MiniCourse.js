@@ -19,203 +19,202 @@ export default class MiniCourse extends H5P.EventDispatcher {
    */
   constructor(options, contentId, contentData) {
     super();
-    const self = this;
 
-    let fullscreen = false;
+    this.fullscreen = false;
 
     Dictionary.fill(options.dictionary);
     Options.fill(options, contentId);
-    options = Options.sanitize(options);
+    this.options = Options.sanitize(options);
 
-    const $unitPanel = $('<div>', {
+    this.$unitPanel = $('<div>', {
       'class': 'h5p-mini-course-units',
       'css': {
         'background-color': options.theme.backgroundColorUnits
       }
     });
 
-    let results = [];
+    this.results = [];
     const numUnits = options.units.length;
 
-    const renderer = LayoutFactory.getLayoutEngine();
-    options.units.forEach(function (unit, index) {
-      renderer.add(unit, index);
+    this.renderer = LayoutFactory.getLayoutEngine();
+    options.units.forEach((unit, index) => {
+      this.renderer.add(unit, index);
     });
 
-    $unitPanel.append(renderer.getElement());
-    const maxScore = renderer.getMaxScore();
+    this.$unitPanel.append(this.renderer.getElement());
+    this.maxScore = this.renderer.getMaxScore();
 
-    const $results = $('<div>', {
+    this.$results = $('<div>', {
       'class': 'h5p-mini-course-results',
       'css': {
         'background-color': options.theme.backgroundColorResults
       }
     });
 
-    $results.append($('<span>', {
+    this.$results.append($('<span>', {
       'class': 'h5p-mini-course-fullscreen-button enter',
-      click: function () {
-        fullscreen = true;
-        H5P.semiFullScreen(self.$container, self);
-        /*const maxHeight = self.$container.height();
-        self.$container.css('height', maxHeigh
-        renderer.goFullscreen(maxHeight);*/
+      click: () => {
+        this.fullscreen = true;
+        H5P.semiFullScreen(this.$container, this);
+        /*const maxHeight = this.$container.height();
+        this.$container.css('height', maxHeigh
+        this.renderer.goFullscreen(maxHeight);*/
       }
     }));
     // Add minimize fullscreen icon:
-    $results.append($('<span>', {
+    this.$results.append($('<span>', {
       'class': 'h5p-mini-course-fullscreen-button exit',
-      click: function () {
+      click: () => {
         H5P.exitFullScreen();
       }
     }));
 
-    const maxScoreWidget = new MaxScoreWidget(maxScore);
-    maxScoreWidget.getElement().appendTo($results);
+    this.maxScoreWidget = new MaxScoreWidget(this.maxScore);
+    this.maxScoreWidget.getElement().appendTo(this.$results);
 
-    const $scorePanel = $('<div>', {
+    this.$scorePanel = $('<div>', {
       'class': 'h5p-mini-course-score h5p-mini-course-result-panel'
-    }).appendTo($results);
+    }).appendTo(this.$results);
 
-    const $progressPanel = $('<div>', {
+    this.$progressPanel = $('<div>', {
       'class': 'h5p-mini-course-progress h5p-mini-course-result-panel'
-    }).appendTo($results);
+    }).appendTo(this.$results);
 
-    const score = new ProgressCircle(maxScore, 'Your Score', false);
-    const progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
+    this.score = new ProgressCircle(this.maxScore, 'Your Score', false);
+    this.progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
 
-    renderer.on('scored', event => {
+    this.renderer.on('scored', event => {
       const result = event.data;
 
-      const previousResult = results[result.index];
+      const previousResult = this.results[result.index];
 
       if (previousResult) {
-        score.increment(-previousResult.score);
+        this.score.increment(-previousResult.score);
       }
 
-      results[result.index] = result;
-      score.increment(result.score);
+      this.results[result.index] = result;
+      this.score.increment(result.score);
     });
-    renderer.on('progress', event => progress.setCurrent(event.data.index));
-    renderer.on('finished', event => showSummary());
+    this.renderer.on('progress', event => this.progress.setCurrent(event.data.index));
+    this.renderer.on('finished', event => this.showSummary());
 
-    self.on('enterFullScreen', function () {
+    this.on('enterFullScreen', () => {
       this.$container.addClass('h5p-fullscreen');
-      fullscreen = true;
+      this.fullscreen = true;
     });
 
     // Respond to exit full screen event
-    self.on('exitFullScreen', function () {
+    this.on('exitFullScreen', () => {
       this.$container.removeClass('h5p-fullscreen');
-      fullscreen = false;
+      this.fullscreen = false;
     });
 
-    const $fullscreenOverlay = $('<div>', {
+    this.$fullscreenOverlay = $('<div>', {
       'class': 'h5p-mini-course-overlay',
       html: '<div class="h5p-mini-course-go-fullscreen">Open mini course</div>',
-      click: function () {
-        H5P.semiFullScreen(self.$container, self, function () {
-          $fullscreenOverlay.removeClass('hide');
+      click: () => {
+        H5P.semiFullScreen(this.$container, this, () => {
+          this.$fullscreenOverlay.removeClass('hide');
         });
-        $fullscreenOverlay.addClass('hide');
+        this.$fullscreenOverlay.addClass('hide');
       }
     });
 
-    self.reset = function () {
-      results = [];
-      progress.reset();
-      score.reset();
-      renderer.reset();
+    this.on('resize', this.resize);
+  }
 
-      setTimeout(function () {
-        $unitPanel.removeClass('finished');
-      }, 600);
-    };
+  reset() {
+    this.results = [];
+    this.progress.reset();
+    this.score.reset();
+    this.renderer.reset();
 
-    const showSummary = () => {
-      const summary = new Summary({
-        score: score.getScore(),
-        maxScore: maxScore,
-        results: results,
-        l10n: options.dictionary.summary
-      });
-      const $summaryElement = summary.getElement();
+    setTimeout(() => {
+      this.$unitPanel.removeClass('finished');
+    }, 600);
+  }
 
-      summary.on('retry', () => {
-        Popup.getInstance().hide();
-        $summaryElement.detach();
-        self.reset();
-      });
+  showSummary() {
+    const summary = new Summary({
+      score: this.score.getScore(),
+      maxScore: this.maxScore,
+      results: this.results,
+      l10n: this.options.dictionary.summary
+    });
+    const $summaryElement = summary.getElement();
 
-      Popup.getInstance().replace([$summaryElement], 'summary');
-    };
+    summary.on('retry', () => {
+      Popup.getInstance().hide();
+      $summaryElement.detach();
+      this.reset();
+    });
 
-    const updateFullScreenButtonVisibility = () => {
-      // If already in full screen, do nothing
-      if (fullscreen) {
-        return;
-      }
+    Popup.getInstance().replace([$summaryElement], 'summary');
+  }
 
-      let forceFullscreen = false;
-      if (options.layout.fullScreen.fullScreenMode === 'always') {
-        forceFullscreen = true;
-      }
-      else if (options.layout.fullScreen.fullScreenMode === 'dynamic') {
-        forceFullscreen = (self.$container.width() < options.layout.fullScreen.forceFullScreenWidthThreshold);
-      }
+  updateFullScreenButtonVisibility() {
+    // If already in full screen, do nothing
+    if (this.fullscreen) {
+      return;
+    }
 
-      self.$container.toggleClass('h5p-mini-course-force-fullscreen', forceFullscreen);
-    };
+    let forceFullscreen = false;
+    if (this.options.layout.fullScreen.fullScreenMode === 'always') {
+      forceFullscreen = true;
+    }
+    else if (this.options.layout.fullScreen.fullScreenMode === 'dynamic') {
+      forceFullscreen = (this.$container.width() < this.options.layout.fullScreen.forceFullScreenWidthThreshold);
+    }
 
-    self.resize = () => {
-      $unitPanel.css({ 'height': '', 'min-height': '' });
-      $results.css('height', '');
-      const width = Math.floor($unitPanel.innerWidth());
-      renderer.resize(width);
+    this.$container.toggleClass('h5p-mini-course-force-fullscreen', forceFullscreen);
+  }
 
-      if (fullscreen) {
-        setTimeout(() => {
-          self.setPanelSize();
-        }, 0); // height values in panels needs to be reset in DOM
-      }
-      else {
-        self.setPanelSize();
-      }
-    };
+  resize() {
+    this.$unitPanel.css({ 'height': '', 'min-height': '' });
+    this.$results.css('height', '');
+    const width = Math.floor(this.$unitPanel.innerWidth());
+    this.renderer.resize(width);
 
-    /**
-     * Set panel size.
-     */
-    self.setPanelSize = () => {
-      const minHeight = $results.parent().height() + 'px';
+    if (this.fullscreen) {
+      setTimeout(() => {
+        this.setPanelSize();
+      }, 0); // height values in panels needs to be reset in DOM
+    }
+    else {
+      this.setPanelSize();
+    }
+  }
 
-      if ($results.css('min-height') === '0px') {
-        $results.css('min-height', minHeight);
-      }
-      $results.css('height', minHeight);
+  /**
+   * Set panel size.
+   */
+  setPanelSize() {
+    const minHeight = this.$results.parent().height() + 'px';
 
-      $unitPanel.css(fullscreen ? 'height' : 'min-height', minHeight);
-    };
+    if (this.$results.css('min-height') === '0px') {
+      this.$results.css('min-height', minHeight);
+    }
+    this.$results.css('height', minHeight);
 
-    self.on('resize', self.resize);
+    this.$unitPanel.css(this.fullscreen ? 'height' : 'min-height', minHeight);
+  }
 
-    /**
-     * Attach to container
-     * @param  {[type]} $container [description]
-     * @return {[type]}
-     */
-    self.attach = ($container) => {
-      self.$container = $container;
-      Popup.setup($container);
+  /**
+   * Attach to container
+   * @param  {[type]} $container [description]
+   * @return {[type]}
+   */
+  attach($container) {
+    this.$container = $container;
+    Popup.setup($container);
 
-      // Something strange about the order here:
-      score.appendTo($scorePanel);
-      progress.appendTo($progressPanel);
-      $results.appendTo($container);
-      $unitPanel.appendTo($container);
-      $fullscreenOverlay.appendTo($container);
+    // Something strange about the order here:
+    this.score.appendTo(this.$scorePanel);
+    this.progress.appendTo(this.$progressPanel);
+    this.$results.appendTo($container);
+    this.$unitPanel.appendTo($container);
+    this.$fullscreenOverlay.appendTo($container);
 
-      updateFullScreenButtonVisibility();
-    };
+    this.updateFullScreenButtonVisibility();
   }
 }

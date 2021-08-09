@@ -8,42 +8,41 @@ class HeaderButton extends H5P.EventDispatcher {
 
   constructor() {
     super();
-    const self = this;
 
-    let state = 'skip';
+    this.state = 'skip';
 
     // Create dom element
-    const $action = $('<a>', {
+    this.$action = $('<a>', {
       'class': 'header-button skip-lesson',
       'text': Dictionary.get('skipLabel'),
       tabindex: 0,
-      click: function () {
-        self.trigger(state);
+      click: () => {
+        this.trigger(this.state);
       }
     });
+  }
 
-    self.getDomElement = function () {
-      return $action;
-    };
+  getDomElement() {
+    return this.$action;
+  }
 
-    self.setState = function (newState) {
-      state = newState;
-      $action.toggleClass('h5p-joubelui-button continue', state === 'continue')
-        .toggleClass('skip-lesson', state === 'skip')
-        .text(state === 'skip' ? Dictionary.get('skipLabel') : Dictionary.get('continueLabel'));
-    };
+  setState(newState) {
+    this.state = newState;
+    this.$action.toggleClass('h5p-joubelui-button continue', this.state === 'continue')
+      .toggleClass('skip-lesson', this.state === 'skip')
+      .text(this.state === 'skip' ? Dictionary.get('skipLabel') : Dictionary.get('continueLabel'));
+  }
 
-    self.skip = function () {
-      self.setState('skip');
-    };
+  skip() {
+    this.setState('skip');
+  }
 
-    self.continue = function () {
-      self.setState('continue');
-    };
+  continue() {
+    this.setState('continue');
+  }
 
-    self.focus = function () {
-      $action.focus();
-    };
+  focus() {
+    this.$action.focus();
   }
 }
 
@@ -89,7 +88,7 @@ export default class PopupLayout extends BaseLayout {
       }
     });*/
 
-    //courseUnit.on('closing-popup', function () {
+    //courseUnit.on('closing-popup', () => {
       //$popupBg.removeClass('visible');
       //popup.hide();
     //});
@@ -139,7 +138,7 @@ export default class PopupLayout extends BaseLayout {
     setTimeout(() => {this.headerButton.focus()}, 400);
 
     instance.trigger('resize');
-  };
+  }
 
   hide() {
     if (!this.isLastLesson()) {

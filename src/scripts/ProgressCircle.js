@@ -17,66 +17,68 @@ const progressTemplate = '<div class="radial-progress" data-progress="0">' +
 export default class ProgressCircle {
 
   constructor(totalScore, label, showTotal) {
-    const self = this;
-    let currentScore = 0;
+    this.totalScore = totalScore;
+    this.label = label;
 
-    self.setCurrent = function (newScore) {
-      currentScore = newScore;
-      updateUI();
+    this.currentScore = 0;
+  }
+
+  setCurrent(newScore) {
+    this.currentScore = newScore;
+    this.updateUI();
+  }
+
+  increment(score) {
+    this.currentScore += (typeof score === 'number') ? score : 1;
+    this.updateUI();
+  }
+
+  reset() {
+    this.currentScore = 0;
+    this.updateUI();
+  }
+
+  getScore() {
+    return this.currentScore;
+  }
+
+  appendTo($container) {
+    this.$container = $container;
+
+    this.$container.append(progressTemplate);
+
+    // Create label:
+    this.$container.append($('<div>', {
+      'class': 'h5p-progress-circle-label',
+      /*'aria-hidden': true,*/
+      text: this.label
+    }));
+
+    // Create textual representation of score/progress
+    this.$textualProgress = $('<div>', {
+      'class': 'h5p-progress-circle-textual-progress'
+    });
+
+    this.$container.append(this.$textualProgress);
+
+    this.$progress = $container.find('.radial-progress');
+    this.$fullAndFill = $container.find('.circle .mask.full, .circle .fill');
+    this.$fillFix = $container.find('.circle .fill.fix');
+
+    this.updateUI();
+  }
+
+  updateUI() {
+    if (this.currentScore > this.totalScore) {
+      this.currentScore = this.totalScore;
     }
 
-    self.increment = function (score) {
-      currentScore += (typeof score === 'number') ? score : 1;
-      updateUI();
-    };
+    const k = Math.ceil((this.currentScore/this.totalScore)*100) * 1.8;
 
-    self.reset = function () {
-      currentScore = 0;
-      updateUI();
-    };
+    this.$fullAndFill.css('transform', 'rotate(' + k + 'deg)');
+    this.$fillFix.css('transform', 'rotate(' + (k * 2) + 'deg)');
+    this.$textualProgress.html(this.currentScore + '<span class="h5p-progress-circle-textual-progress-divider">/</span>' + this.totalScore);
 
-    self.getScore = function () {
-      return currentScore;
-    };
-
-    self.appendTo = function ($container) {
-      self.$container = $container;
-
-      self.$container.append(progressTemplate);
-
-      // Create label:
-      self.$container.append($('<div>', {
-        'class': 'h5p-progress-circle-label',
-        /*'aria-hidden': true,*/
-        text: label
-      }));
-
-      // Create textual representation of score/progress
-      self.$textualProgress = $('<div>', {
-        'class': 'h5p-progress-circle-textual-progress'
-      });
-
-      self.$container.append(self.$textualProgress);
-
-      self.$progress = $container.find('.radial-progress');
-      self.$fullAndFill = $container.find('.circle .mask.full, .circle .fill');
-      self.$fillFix = $container.find('.circle .fill.fix');
-
-      updateUI();
-    };
-
-    const updateUI = function () {
-      if (currentScore > totalScore) {
-        currentScore = totalScore;
-      }
-
-      const k = Math.ceil((currentScore/totalScore)*100) * 1.8;
-
-      self.$fullAndFill.css('transform', 'rotate(' + k + 'deg)');
-      self.$fillFix.css('transform', 'rotate(' + (k * 2) + 'deg)');
-      self.$textualProgress.html(currentScore + '<span class="h5p-progress-circle-textual-progress-divider">/</span>' + totalScore);
-
-      //self.$text.attr('aria-valuenow', currentScore);
-    };
+    //this.$text.attr('aria-valuenow', currentScore);
   }
 }
