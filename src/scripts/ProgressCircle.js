@@ -19,6 +19,7 @@ export default class ProgressCircle {
   constructor(totalScore, label, showTotal) {
     this.totalScore = totalScore;
     this.label = label;
+    this.showTotal = showTotal;
 
     this.currentScore = 0;
   }
@@ -73,7 +74,7 @@ export default class ProgressCircle {
       this.currentScore = this.totalScore;
     }
 
-    const k = Math.ceil((this.currentScore/this.totalScore)*100) * 1.8;
+    const k = Math.ceil((this.currentScore / this.totalScore) * 100) * 1.8;
 
     this.$fullAndFill.css('transform', 'rotate(' + k + 'deg)');
     this.$fillFix.css('transform', 'rotate(' + (k * 2) + 'deg)');

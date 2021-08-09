@@ -34,7 +34,7 @@ class UnitHeader {
   setState(state, score) {
     this.$label.text(this.hasScore ? (state === 'ready' ? Dictionary.get('maxScoreLabel') : Dictionary.get('youGotLabel')) : Dictionary.get('infoLessonLabel'));
 
-    let value = ''
+    let value = '';
     if (!this.hasScore) {
       value = Dictionary.get('infoLessonValue');
     }

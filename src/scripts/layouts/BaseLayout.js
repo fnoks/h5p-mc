@@ -59,7 +59,9 @@ export default class BaseLayout extends H5P.EventDispatcher {
 
   enableNext() {
     this.courseUnits[this.activeElement].done();
-    this.trigger('progress', {index: this.activeElement+1});
+    this.trigger('progress', {
+      index: this.activeElement + 1
+    });
 
     if (!this.isLastLesson()) {
       this.activeElement++;
@@ -71,7 +73,7 @@ export default class BaseLayout extends H5P.EventDispatcher {
   }
 
   isLastLesson() {
-    return this.activeElement+1 >= this.getLessonCount();
+    return this.activeElement + 1 >= this.getLessonCount();
   }
 
   resize() {

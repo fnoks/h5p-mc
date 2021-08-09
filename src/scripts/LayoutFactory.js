@@ -8,7 +8,7 @@ const layoutMap = {
   'linear': LinearLayout,
   'grid': GridLayout,
   'pages': SlideLayout
-}
+};
 
 export default class LayoutFactory {
   static getLayoutEngine() {

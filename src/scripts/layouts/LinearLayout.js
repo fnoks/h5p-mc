@@ -13,7 +13,7 @@ export default class LinearLayout extends PopupLayout {
 
   add(courseUnit) {
 
-    const $unit = $(`<div class="timeline-item large-margin-tb">
+    $(`<div class="timeline-item large-margin-tb">
       <div class="content-r title-block medium-title animate-appear">${courseUnit.getHeader()}</div>
       <div class="content-dot animate-scale-dot"></div>
       <div class="content-l content-block frame animate-appear">

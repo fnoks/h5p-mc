@@ -88,10 +88,10 @@ export default class PopupLayout extends BaseLayout {
       }
     });*/
 
-    //courseUnit.on('closing-popup', () => {
-      //$popupBg.removeClass('visible');
-      //popup.hide();
-    //});
+    // courseUnit.on('closing-popup', () => {
+    //   this.$popupBg.removeClass('visible');
+    //   this.popup.hide();
+    // });
   }
 
   canContinue() {
@@ -135,7 +135,9 @@ export default class PopupLayout extends BaseLayout {
       $h5pContent
     ], courseUnit.getClassName());
 
-    setTimeout(() => {this.headerButton.focus()}, 400);
+    setTimeout(() => {
+      this.headerButton.focus();
+    }, 400);
 
     instance.trigger('resize');
   }

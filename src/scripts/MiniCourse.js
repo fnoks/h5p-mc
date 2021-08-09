@@ -1,4 +1,3 @@
-import CourseUnit from './CourseUnit';
 import LayoutFactory from './LayoutFactory';
 import Dictionary from './Dictionary';
 import Options from './Options';
@@ -21,6 +20,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
     super();
 
     this.fullscreen = false;
+    this.contentData = contentData;
 
     Dictionary.fill(options.dictionary);
     Options.fill(options, contentId);
@@ -96,7 +96,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
       this.score.increment(result.score);
     });
     this.renderer.on('progress', event => this.progress.setCurrent(event.data.index));
-    this.renderer.on('finished', event => this.showSummary());
+    this.renderer.on('finished', () => this.showSummary());
 
     this.on('enterFullScreen', () => {
       this.$container.addClass('h5p-fullscreen');

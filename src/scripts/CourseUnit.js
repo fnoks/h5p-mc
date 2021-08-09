@@ -1,7 +1,4 @@
-import Dictionary from './Dictionary';
 import Options from './Options';
-
-const $ = H5P.jQuery;
 
 const scorables = [
   "H5P.ImageHotspotQuestion",
