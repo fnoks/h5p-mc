@@ -28,7 +28,10 @@ export default class MiniCourse extends H5P.EventDispatcher {
     options = Options.sanitize(options);
 
     var $unitPanel = $('<div>', {
-      'class': 'h5p-mini-course-units'
+      'class': 'h5p-mini-course-units',
+      'css': {
+        'background-color': options.theme.backgroundColorUnits
+      }
     });
 
     var results = [];
@@ -43,7 +46,10 @@ export default class MiniCourse extends H5P.EventDispatcher {
     var maxScore = renderer.getMaxScore();
 
     var $results = $('<div>', {
-      'class': 'h5p-mini-course-results'
+      'class': 'h5p-mini-course-results',
+      'css': {
+        'background-color': options.theme.backgroundColorResults
+      }
     });
 
     $results.append($('<span>', {

@@ -275,7 +275,7 @@
         "type": "text",
         "label": "Background color for results panel",
         "widget": "colorSelector",
-        "default": "fff"
+        "default": "#1C1D21"
       }
     ]
   },
