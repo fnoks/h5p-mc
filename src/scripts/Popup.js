@@ -76,7 +76,8 @@ export default class Popup extends H5P.EventDispatcher {
   replace($elements, popupClass) {
     this.$popup.removeClass('visible');
 
-    setTimeout(() => {
+    clearTimeout(this.popupTimeout);
+    this.popupTimeout = setTimeout(() => {
       this.$popup.children().detach();
 
       $elements.forEach(($element) => {
@@ -104,7 +105,8 @@ export default class Popup extends H5P.EventDispatcher {
     this.$popup.removeClass('visible');
     this.$popupBg.removeClass('visible');
 
-    setTimeout(() => {
+    clearTimeout(this.popupTimeout);
+    this.popupTimeout = setTimeout(() => {
       if (this.currentPopupClass) {
         this.$popup.removeClass(this.currentPopupClass);
         this.currentPopupClass = undefined;

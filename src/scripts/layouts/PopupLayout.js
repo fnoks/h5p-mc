@@ -1,6 +1,7 @@
 import BaseLayout from './BaseLayout';
 import Dictionary from '../Dictionary';
 import Popup from '../Popup';
+import Options from '../Options';
 
 const $ = H5P.jQuery;
 
@@ -134,6 +135,10 @@ export default class PopupLayout extends BaseLayout {
       return;
     }
 
+    if (!Options.all().behaviour.forceSequential) {
+      this.activeElement = courseUnit.index;
+    }
+
     this.headerButton = new HeaderButton();
     const instance = courseUnit.getInstance();
     const $h5pContent = $('<div>', {
@@ -180,10 +185,7 @@ export default class PopupLayout extends BaseLayout {
    * Hide currently open course unit.
    */
   hide() {
-    if (!this.isLastLesson()) {
-      Popup.getInstance().hide();
-    }
-
+    Popup.getInstance().hide();
     this.enableNext();
   }
 }

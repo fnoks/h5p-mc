@@ -16,6 +16,8 @@ class UnitHeader {
     this.hasScore = hasScore;
     this.maxScore = maxScore;
 
+    this.completed = false;
+
     this.$element = $('<div>', {
       'class': 'h5p-mini-course-unit-header'
     });
@@ -141,6 +143,8 @@ class GridUnit extends CourseUnit {
 
     this.$beginButton.html(Dictionary.get('lessonCompletedLabel')).attr('disabled', 'disabled');
     this.$unitPanel.removeClass('enabled').addClass('done');
+
+    this.completed = true;
   }
 
   /**
@@ -151,6 +155,8 @@ class GridUnit extends CourseUnit {
     this.$beginButton.html(Dictionary.get('lessonLockedLabel'));
     //this.headerButton.skip();
     this.$unitPanel.removeClass('done').addClass('locked');
+
+    this.completed = false;
   }
 }
 

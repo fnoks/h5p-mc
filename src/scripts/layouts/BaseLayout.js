@@ -60,8 +60,16 @@ export default class BaseLayout extends H5P.EventDispatcher {
 
     this.activeElement = 0;
 
-    // Enable first unit:
-    this.enable(0);
+
+    if (Options.all().behaviour.forceSequential) {
+      // Enable first unit only
+      this.enable(0);
+    }
+    else {
+      this.courseUnits.forEach((unit) => {
+        unit.enable();
+      });
+    }
   }
 
   /**
@@ -87,16 +95,23 @@ export default class BaseLayout extends H5P.EventDispatcher {
    */
   enableNext() {
     this.courseUnits[this.activeElement].done();
+
+    const unitsCompleted = this.courseUnits.reduce((sum, unit) => {
+      return sum + (unit.completed ? 1 : 0);
+    }, 0);
+
     this.trigger('progress', {
-      index: this.activeElement + 1
+      index: unitsCompleted
     });
 
-    if (!this.isLastLesson()) {
-      this.activeElement++;
-      this.enable(this.activeElement);
+    if (unitsCompleted === this.getLessonCount()) {
+      this.trigger('finished');
     }
     else {
-      this.trigger('finished');
+      if (Options.all().behaviour.forceSequential) {
+        this.activeElement++;
+        this.enable(this.activeElement);
+      }
     }
   }
 
