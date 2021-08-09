@@ -22,22 +22,22 @@ export default class MiniCourse extends H5P.EventDispatcher {
     this.fullscreen = false;
     this.contentData = contentData;
 
+    this.options = Options.sanitize(options);
     Dictionary.fill(options.dictionary);
     Options.fill(options, contentId);
-    this.options = Options.sanitize(options);
 
     this.$unitPanel = $('<div>', {
       'class': 'h5p-mini-course-units',
       'css': {
-        'background-color': options.theme.backgroundColorUnits
+        'background-color': this.options.theme.backgroundColorUnits
       }
     });
 
     this.results = [];
-    const numUnits = options.units.length;
+    const numUnits = this.options.units.length;
 
     this.renderer = LayoutFactory.getLayoutEngine();
-    options.units.forEach((unit, index) => {
+    this.options.units.forEach((unit, index) => {
       this.renderer.add(unit, index);
     });
 
@@ -47,7 +47,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
     this.$results = $('<div>', {
       'class': 'h5p-mini-course-results',
       'css': {
-        'background-color': options.theme.backgroundColorResults
+        'background-color': this.options.theme.backgroundColorResults
       }
     });
 
