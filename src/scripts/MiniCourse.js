@@ -200,7 +200,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
    * Set panel size.
    */
   setPanelSize() {
-    const minHeight = this.$results.parent().height() + 'px';
+    const minHeight = `${this.$results.parent().height()}px`;
 
     if (this.$results.css('min-height') === '0px') {
       this.$results.css('min-height', minHeight);

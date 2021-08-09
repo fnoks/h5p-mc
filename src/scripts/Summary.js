@@ -49,12 +49,12 @@ export default class Summary extends H5P.EventDispatcher {
     });
     this.params.results.forEach((result) => {
       const score = (typeof result.score === 'number') ?
-        (result.score + '/' + result.maxScore) :
+        (`${result.score}/${result.maxScore}`) :
         Dictionary.get('summary').noScore;
 
       $detailedResults.append($('<div>', {
         'class': 'h5p-mini-course-summary-lesson-result',
-        html: '<span class="prefix">Lesson ' + result.index + '</span><span class="title">' + result.header + '</span><span class="score">' + score + '</span>'
+        html: `<span class="prefix">Lesson ${result.index}</span><span class="title">${result.header}</span><span class="score">${score}</span>'`
       }));
     });
     this.$element.append($detailedResults);

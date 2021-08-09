@@ -53,7 +53,7 @@ class UnitHeader {
       value = Dictionary.get('infoLessonValue');
     }
     else {
-      value = state === 'ready' ? this.maxScore + ' points' : score + ' of ' + this.maxScore + ' points';
+      value = state === 'ready' ? `${this.maxScore} points` : `${score} of ${this.maxScore} points`;
     }
 
     this.$value.text(value);
@@ -76,7 +76,7 @@ class GridUnit extends CourseUnit {
     });
 
     this.$unitPanelInner = $('<div>', {
-      'class': 'h5p-mini-course-unit-panel-inner ' + this.getClassName(),
+      'class': `h5p-mini-course-unit-panel-inner ${this.getClassName()}`,
       tabIndex: 0
     }).appendTo(this.$unitPanel);
 
@@ -114,7 +114,7 @@ class GridUnit extends CourseUnit {
    * @param {number} width Width in percent.
    */
   setWidth(width) {
-    this.$unitPanel.css({width: width + '%'});
+    this.$unitPanel.css({width: `${width} %`});
   }
 
   /**

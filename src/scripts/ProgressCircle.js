@@ -104,9 +104,9 @@ export default class ProgressCircle {
 
     const k = Math.ceil((this.currentScore / this.totalScore) * 100) * 1.8;
 
-    this.$fullAndFill.css('transform', 'rotate(' + k + 'deg)');
-    this.$fillFix.css('transform', 'rotate(' + (k * 2) + 'deg)');
-    this.$textualProgress.html(this.currentScore + '<span class="h5p-progress-circle-textual-progress-divider">/</span>' + this.totalScore);
+    this.$fullAndFill.css('transform', `rotate(${k}deg)`);
+    this.$fillFix.css('transform', `rotate(${k * 2}deg)`);
+    this.$textualProgress.html(`${this.currentScore}<span class="h5p-progress-circle-textual-progress-divider">/</span>${this.totalScore}`);
 
     //this.$text.attr('aria-valuenow', currentScore);
   }
