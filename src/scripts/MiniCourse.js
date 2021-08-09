@@ -61,6 +61,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
         this.renderer.goFullscreen(maxHeight);*/
       }
     }));
+
     // Add minimize fullscreen icon:
     this.$results.append($('<span>', {
       'class': 'h5p-mini-course-fullscreen-button exit',

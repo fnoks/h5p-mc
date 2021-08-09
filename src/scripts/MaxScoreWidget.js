@@ -19,7 +19,7 @@ export default class MaxScoreWidget {
   }
 
   /**
-   * @returm {jQuery} DOM element.
+   * @return {jQuery} DOM element.
    */
   getElement() {
     return this.$element;

@@ -121,7 +121,6 @@ export default class CourseUnit extends H5P.EventDispatcher {
     return this.options.header;
   }
 
-
   /**
    * Get unit introduction text.
    * @return {string} Unit introduction text.

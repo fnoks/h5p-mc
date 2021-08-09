@@ -37,6 +37,7 @@ export default class Summary extends H5P.EventDispatcher {
     setTimeout(() => {
       scoreBar.setScore(this.params.score);
     }, 0);
+
     // Greeting
     this.$element.append($('<div>', {
       'class': 'h5p-mini-course-summary-greeting',
