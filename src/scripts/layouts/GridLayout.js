@@ -7,6 +7,11 @@ const $ = H5P.jQuery;
 
 class UnitHeader {
 
+  /**
+   * @constructor
+   * @param {function} hasScore Callback to determine if score was set.
+   * @param {number} maxScore Maxumum achievable score.
+   */
   constructor(hasScore, maxScore) {
     this.hasScore = hasScore;
     this.maxScore = maxScore;
@@ -27,10 +32,19 @@ class UnitHeader {
     this.setState('ready');
   }
 
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element.
+   */
   getDomElement() {
     return this.$element;
   }
 
+  /**
+   * Set state.
+   * @param {string} state State.
+   * @param {number} score Score.
+   */
   setState(state, score) {
     this.$label.text(this.hasScore ? (state === 'ready' ? Dictionary.get('maxScoreLabel') : Dictionary.get('youGotLabel')) : Dictionary.get('infoLessonLabel'));
 
@@ -47,6 +61,11 @@ class UnitHeader {
 }
 
 class GridUnit extends CourseUnit {
+  /**
+   * @constructor
+   * @param {object} options Options.
+   * @param {number} index Unit index.
+   */
   constructor(options, index) {
     super(options, index);
 
@@ -82,14 +101,25 @@ class GridUnit extends CourseUnit {
     }).appendTo(this.$unitPanelInner);
   }
 
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element for unit panel.
+   */
   getDomElement() {
     return this.$unitPanel;
   }
 
+  /**
+   * Set width in percent.
+   * @param {number} width Width in percent.
+   */
   setWidth(width) {
     this.$unitPanel.css({width: width + '%'});
   }
 
+  /**
+   * Enable.
+   */
   enable() {
     this.enabled = true;
     this.$unitPanel.removeClass('locked').addClass('enabled');
@@ -98,6 +128,10 @@ class GridUnit extends CourseUnit {
     setTimeout(() => this.$beginButton.focus(), 1);
   }
 
+  /**
+   * Call unit done.
+   * @param {number} score Score that was achieved.
+   */
   done(score) {
     if (score) {
       this.unitHeader.setState('done', this.score);
@@ -107,6 +141,9 @@ class GridUnit extends CourseUnit {
     this.$unitPanel.removeClass('enabled').addClass('done');
   }
 
+  /**
+   * Reset.
+   */
   reset() {
     super.reset();
     this.$beginButton.html(Dictionary.get('lessonLockedLabel'));
@@ -117,6 +154,9 @@ class GridUnit extends CourseUnit {
 
 export default class GridLayout extends PopupLayout {
 
+  /**
+   * @constructor
+   */
   constructor() {
     super();
 
@@ -127,10 +167,19 @@ export default class GridLayout extends PopupLayout {
     });
   }
 
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element.
+   */
   getElement() {
     return this.$container;
   }
 
+  /**
+   * Add element.
+   * @param {object} options Options.
+   * @param {number} index element index.
+   */
   add(options, index) {
     const gridElement = new GridUnit(options, index);
     const $domElement = gridElement.getDomElement();
@@ -138,6 +187,10 @@ export default class GridLayout extends PopupLayout {
     super.add(gridElement);
   }
 
+  /**
+   * Resize element.
+   * @param {number} width Width.
+   */
   resize(width) {
     super.resize();
 

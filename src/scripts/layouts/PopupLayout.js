@@ -6,6 +6,9 @@ const $ = H5P.jQuery;
 
 class HeaderButton extends H5P.EventDispatcher {
 
+  /**
+   * @constructor
+   */
   constructor() {
     super();
 
@@ -22,10 +25,18 @@ class HeaderButton extends H5P.EventDispatcher {
     });
   }
 
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element.
+   */
   getDomElement() {
     return this.$action;
   }
 
+  /**
+   * Set state.
+   * @param {string} newState State to set.
+   */
   setState(newState) {
     this.state = newState;
     this.$action.toggleClass('h5p-joubelui-button continue', this.state === 'continue')
@@ -33,14 +44,23 @@ class HeaderButton extends H5P.EventDispatcher {
       .text(this.state === 'skip' ? Dictionary.get('skipLabel') : Dictionary.get('continueLabel'));
   }
 
+  /**
+   * Set state to 'skip'.
+   */
   skip() {
     this.setState('skip');
   }
 
+  /**
+   * Set state to 'continue'.
+   */
   continue() {
     this.setState('continue');
   }
 
+  /**
+   * Focus.
+   */
   focus() {
     this.$action.focus();
   }
@@ -51,6 +71,10 @@ export default class PopupLayout extends BaseLayout {
     super();
   }
 
+  /**
+   * Add course unit to layout.
+   * @param {CourseUnit} courseUnit Course unit.
+   */
   add(courseUnit) {
     super.add(courseUnit);
 
@@ -94,10 +118,17 @@ export default class PopupLayout extends BaseLayout {
     // });
   }
 
+  /**
+   * Allow to continue.
+   */
   canContinue() {
     this.headerButton.continue();
   }
 
+  /**
+   * Show specific course unit.
+   * @param {CourseUnit} courseUnit Course unit.
+   */
   show(courseUnit) {
     if (!courseUnit.enabled) {
       return;
@@ -142,6 +173,9 @@ export default class PopupLayout extends BaseLayout {
     instance.trigger('resize');
   }
 
+  /**
+   * Hide currently open course unit.
+   */
   hide() {
     if (!this.isLastLesson()) {
       Popup.getInstance().hide();

@@ -16,6 +16,12 @@ const progressTemplate = '<div class="radial-progress" data-progress="0">' +
 
 export default class ProgressCircle {
 
+  /**
+   * @constructor
+   * @param {number} totalScore Total score.
+   * @param {string} label Label for circle.
+   * @param {boolean} showTotal If true, will show maxScore, else not. (TODO)
+   */
   constructor(totalScore, label, showTotal) {
     this.totalScore = totalScore;
     this.label = label;
@@ -24,25 +30,44 @@ export default class ProgressCircle {
     this.currentScore = 0;
   }
 
+  /**
+   * Set score.
+   * @param {number} newScore Score to set.
+   */
   setCurrent(newScore) {
     this.currentScore = newScore;
     this.updateUI();
   }
 
+  /**
+   * Increment score.
+   * @param {number} score Score to add/subtract.
+   */
   increment(score) {
     this.currentScore += (typeof score === 'number') ? score : 1;
     this.updateUI();
   }
 
+  /**
+   * Reset score.
+   */
   reset() {
     this.currentScore = 0;
     this.updateUI();
   }
 
+  /**
+   * Retrieve current score.
+   * @return {number} Current score.
+   */
   getScore() {
     return this.currentScore;
   }
 
+  /**
+   * Append progress circle to container.
+   * @param {jQuery} $container Container to append progress circle to.
+   */
   appendTo($container) {
     this.$container = $container;
 
@@ -69,6 +94,9 @@ export default class ProgressCircle {
     this.updateUI();
   }
 
+  /**
+   * Update the progress circle visuals.
+   */
   updateUI() {
     if (this.currentScore > this.totalScore) {
       this.currentScore = this.totalScore;

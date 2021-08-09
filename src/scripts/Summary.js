@@ -3,6 +3,14 @@ const $ = H5P.jQuery;
 
 export default class Summary extends H5P.EventDispatcher {
 
+  /**
+   * @constructor
+   * @param {object} params Parameters.
+   * @param {number} params.score Score that was achieved.
+   * @param {number} params.maxScore Maximum score achievable.
+   * @param {object[]} params.results Results of tasks.
+   * @param {object} params.l10n Localization strings.
+   */
   constructor(params = {}) {
     super();
 
@@ -61,6 +69,10 @@ export default class Summary extends H5P.EventDispatcher {
     }));
   }
 
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element.
+   */
   getElement() {
     return this.$element;
   }

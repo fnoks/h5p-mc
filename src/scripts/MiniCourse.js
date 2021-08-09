@@ -12,9 +12,9 @@ export default class MiniCourse extends H5P.EventDispatcher {
   /**
    * @constructor
    * @extends Question
-   * @param {object} options Options for single choice set
-   * @param {string} contentId H5P instance id
-   * @param {Object} contentData H5P instance data
+   * @param {object} options Options for single choice set.
+   * @param {string} contentId H5P instance id.
+   * @param {object} contentData H5P instance data.
    */
   constructor(options, contentId, contentData) {
     super();
@@ -123,6 +123,9 @@ export default class MiniCourse extends H5P.EventDispatcher {
     this.on('resize', this.resize);
   }
 
+  /**
+   * Reset course.
+   */
   reset() {
     this.results = [];
     this.progress.reset();
@@ -134,6 +137,9 @@ export default class MiniCourse extends H5P.EventDispatcher {
     }, 600);
   }
 
+  /**
+   * Show the summary.
+   */
   showSummary() {
     const summary = new Summary({
       score: this.score.getScore(),
@@ -152,6 +158,9 @@ export default class MiniCourse extends H5P.EventDispatcher {
     Popup.getInstance().replace([$summaryElement], 'summary');
   }
 
+  /**
+   * Update visibility of fullscreen button.
+   */
   updateFullScreenButtonVisibility() {
     // If already in full screen, do nothing
     if (this.fullscreen) {
@@ -169,6 +178,9 @@ export default class MiniCourse extends H5P.EventDispatcher {
     this.$container.toggleClass('h5p-mini-course-force-fullscreen', forceFullscreen);
   }
 
+  /**
+   * Resize content.
+   */
   resize() {
     this.$unitPanel.css({ 'height': '', 'min-height': '' });
     this.$results.css('height', '');
@@ -201,8 +213,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
 
   /**
    * Attach to container
-   * @param  {[type]} $container [description]
-   * @return {[type]}
+   * @param  {jQuery} $container Container to attach course content to.
    */
   attach($container) {
     this.$container = $container;

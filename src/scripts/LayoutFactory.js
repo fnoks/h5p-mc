@@ -11,6 +11,10 @@ const layoutMap = {
 };
 
 export default class LayoutFactory {
+  /**
+   * Get layout engine.
+   * @return {(LinearLayout|GridLayout|SlideLayout)} Layout.
+   */
   static getLayoutEngine() {
     const engineClass = layoutMap[Options.get('layoutEngine')];
     return new engineClass;

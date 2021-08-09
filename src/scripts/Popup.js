@@ -2,14 +2,26 @@ const $ = H5P.jQuery;
 
 export default class Popup extends H5P.EventDispatcher {
 
+  /**
+   * Setup new popup instance.
+   * @param {jQuery} Container to attach popup to.
+   */
   static setup($container) {
     Popup.instance = new Popup(100, $container);
   }
 
+  /**
+   * Get popup instance. Needs to have been instantiated.
+   */
   static getInstance() {
     return Popup.instance;
   }
 
+  /**
+   * @constructor
+   * @param {number} popupZIndex Z index for popup.
+   * @param {jQuery} $container Container to attach popup to.
+   */
   constructor(popupZIndex, $container) {
     super();
 
@@ -34,6 +46,11 @@ export default class Popup extends H5P.EventDispatcher {
     }).appendTo(this.$popup);
   }
 
+  /**
+   * Show popup.
+   * @param {jQuery[]} $elements Elements to attach to popup.
+   * @param {string} popupClass Style class name.
+   */
   show($elements, popupClass) {
     $elements.forEach(($element) => {
       this.$popup.append($element);
@@ -51,6 +68,11 @@ export default class Popup extends H5P.EventDispatcher {
     }, 200);
   }
 
+  /**
+   * Replace elements in popup. Will remove all current elements.
+   * @param {jQuery[]} $elements Elements to set in popup.
+   * @param {string} popupClass Style class name.
+   */
   replace($elements, popupClass) {
     this.$popup.removeClass('visible');
 
@@ -75,6 +97,9 @@ export default class Popup extends H5P.EventDispatcher {
     //setTimeout(() => {this.$popup.addClass('visible')}, 200);
   }
 
+  /**
+   * Hide popup.
+   */
   hide() {
     this.$popup.removeClass('visible');
     this.$popupBg.removeClass('visible');
@@ -90,6 +115,10 @@ export default class Popup extends H5P.EventDispatcher {
     }, 1000);
   }
 
+  /**
+   * Get DOM element for popup.
+   * @return {jQuery} DOM element for popup.
+   */
   getDomElement() {
     return this.$popup;
   }

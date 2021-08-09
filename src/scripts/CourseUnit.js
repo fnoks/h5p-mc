@@ -19,6 +19,11 @@ const scorables = [
 
 export default class CourseUnit extends H5P.EventDispatcher {
 
+  /**
+   * @constructor
+   * @param {object} options Options.
+   * @param {number} index Unit index.
+   */
   constructor(options, index) {
     super();
 
@@ -33,6 +38,10 @@ export default class CourseUnit extends H5P.EventDispatcher {
     this.className = this.machineName.toLowerCase().replace('.', '-');
   }
 
+  /**
+   * Get content instance.
+   * @return {H5P.ContentType} Content type instance.
+   */
   getInstance() {
     if (this.instance === undefined) {
       this.instance = H5P.newRunnable(this.options.action, Options.contentId);
@@ -58,6 +67,9 @@ export default class CourseUnit extends H5P.EventDispatcher {
     return this.instance;
   }
 
+  /**
+   * Reset course unit.
+   */
   reset() {
     if (this.instance && this.instance.resetTask) {
       //this.instance.resetTask();
@@ -65,6 +77,10 @@ export default class CourseUnit extends H5P.EventDispatcher {
     this.instance = undefined;
   }
 
+  /**
+   * Check whether a score was set.
+   * @return {boolean} True, if score is not 0. Else false.
+   */
   hasScore() {
     if (scorables.indexOf(this.getMachineName()) !== -1) {
       return (this.options.maxScore !== 0);
@@ -73,26 +89,50 @@ export default class CourseUnit extends H5P.EventDispatcher {
     return false;
   }
 
+  /**
+   * Get maximum score achievable.
+   * @return {number} Maximum score achievable.
+   */
   getMaxScore() {
     return this.options.maxScore || 0;
   }
 
+  /**
+   * Get H5P machine name.
+   * @return {string} H5P machine name.
+   */
   getMachineName() {
     return this.machineName;
   }
 
+  /**
+   * Get class name.
+   * @return {string} Class name.
+   */
   getClassName() {
     return this.className;
   }
 
+  /**
+   * Get unit header text.
+   * @return {string} Unit header text.
+   */
   getHeader() {
     return this.options.header;
   }
 
+
+  /**
+   * Get unit introduction text.
+   * @return {string} Unit introduction text.
+   */
   getIntro() {
     return this.options.intro;
   }
 
+  /**
+   * Resize unit.
+   */
   resize() {
     if (this.instance) {
       this.instance.trigger('resize');

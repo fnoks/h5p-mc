@@ -1,17 +1,35 @@
 export default class Options {
+  /**
+   * Fill options with values.
+   * @param {object} options Options.
+   * @param {number} contentId Content id.
+   */
   static fill(options, contentId) {
     Options.options = options;
     Options.contentId = contentId;
   }
 
+  /**
+   * Get particular option value.
+   * @param {string} key Key to look for.
+   * @return {*} Option value for key.
+   */
   static get(key) {
     return Options.options[key];
   }
 
+  /**
+   * Return content id.
+   * @return {number} Content id.
+   */
   static contentId() {
     return Options.contentId;
   }
 
+  /**
+   * Get all options.
+   * @return {object} All options.
+   */
   static all() {
     return Options.options;
   }

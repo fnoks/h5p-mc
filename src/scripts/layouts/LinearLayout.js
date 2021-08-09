@@ -3,6 +3,9 @@ import PopupLayout from './PopupLayout';
 const $ = H5P.jQuery;
 
 export default class LinearLayout extends PopupLayout {
+  /**
+   * @constructor
+   */
   constructor() {
     super();
 
@@ -11,6 +14,10 @@ export default class LinearLayout extends PopupLayout {
     });
   }
 
+  /**
+   * Add course unit.
+   * @param {CourseUnit} courseUnit Course unit.
+   */
   add(courseUnit) {
 
     $(`<div class="timeline-item large-margin-tb">
@@ -26,14 +33,24 @@ export default class LinearLayout extends PopupLayout {
     super.add(courseUnit);
   }
 
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element.
+   */
   getElement() {
     return this.$container;
   }
 
+  /**
+   * Enable.
+   */
   enable() {
 
   }
 
+  /**
+   * Resize.
+   */
   resize() {
 
   }

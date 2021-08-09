@@ -1,6 +1,9 @@
 import Options from '../Options';
 
 export default class BaseLayout extends H5P.EventDispatcher {
+  /**
+   * @constructor
+   */
   constructor() {
     super();
 
@@ -9,6 +12,10 @@ export default class BaseLayout extends H5P.EventDispatcher {
     this.activeElement = 0;
   }
 
+  /**
+   * Add course unit.
+   * @param {CourseUnit} courseUnit CourseUnit.
+   */
   add(courseUnit) {
     this.courseUnits.push(courseUnit);
     this.maxScore += courseUnit.getMaxScore();
@@ -25,16 +32,26 @@ export default class BaseLayout extends H5P.EventDispatcher {
     }
   }
 
+  /**
+   * Get maximum achievable score.
+   * @return {number} Maximum achievable score.
+   */
   getMaxScore() {
     return this.maxScore;
   }
 
+  /**
+   * Go to fullscreen.
+   */
   goFullscreen() {
     //const parentHeight = this.$grid.parent().height();
     const gridHeight = this.$container.height();
     this.$container.css('height', `${gridHeight}px`);
   }
 
+  /**
+   * Reset all units.
+   */
   reset() {
     // Reset all units
     this.courseUnits.forEach((unit) => {
@@ -47,16 +64,27 @@ export default class BaseLayout extends H5P.EventDispatcher {
     this.enable(0);
   }
 
+  /**
+   * Enable particular unit.
+   * @param {number} index Unit index.
+   */
   enable(index) {
     if (index < this.getLessonCount()) {
       this.courseUnits[index].enable();
     }
   }
 
+  /**
+   * Count number of lessons.
+   * @return {number} Number of lessons.
+   */
   getLessonCount() {
     return this.courseUnits.length;
   }
 
+  /**
+   * Enable next lesson.
+   */
   enableNext() {
     this.courseUnits[this.activeElement].done();
     this.trigger('progress', {
@@ -72,10 +100,17 @@ export default class BaseLayout extends H5P.EventDispatcher {
     }
   }
 
+  /**
+   * Determine whether current lesson is last one.
+   * @return {boolean} True, if current lesson is last. Else false.
+   */
   isLastLesson() {
     return this.activeElement + 1 >= this.getLessonCount();
   }
 
+  /**
+   * Resize.
+   */
   resize() {
     this.courseUnits.forEach(unit => unit.resize());
   }
