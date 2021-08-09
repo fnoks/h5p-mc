@@ -116,7 +116,7 @@ class GridUnit extends CourseUnit {
    * @param {number} width Width in percent.
    */
   setWidth(width) {
-    this.$unitPanel.css({width: `${width} %`});
+    this.$unitPanel.css({width: `${width}%`});
   }
 
   /**
