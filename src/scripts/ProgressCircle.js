@@ -20,7 +20,7 @@ export default class ProgressCircle {
    * @constructor
    * @param {number} totalScore Total score.
    * @param {string} label Label for circle.
-   * @param {boolean} showTotal If true, will show maxScore, else not. (TODO)
+   * @param {boolean} showTotal If true, will show maxScore, else not.
    */
   constructor(totalScore, label, showTotal) {
     this.totalScore = totalScore;
@@ -106,7 +106,12 @@ export default class ProgressCircle {
 
     this.$fullAndFill.css('transform', `rotate(${k}deg)`);
     this.$fillFix.css('transform', `rotate(${k * 2}deg)`);
-    this.$textualProgress.html(`${this.currentScore}<span class="h5p-progress-circle-textual-progress-divider">/</span>${this.totalScore}`);
+
+    const textualProgress = (this.showTotal) ?
+      `${this.currentScore}<span class="h5p-progress-circle-textual-progress-divider">/</span>${this.totalScore}` :
+      this.currentScore;
+
+    this.$textualProgress.html(textualProgress);
 
     //this.$text.attr('aria-valuenow', currentScore);
   }
