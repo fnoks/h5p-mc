@@ -50,10 +50,12 @@ class UnitHeader {
 
     let value = '';
     if (!this.hasScore) {
-      value = Dictionary.get('infoLessonValue');
+      value = `0 ${Dictionary.get('points')}`;
     }
     else {
-      value = state === 'ready' ? `${this.maxScore} points` : `${score} of ${this.maxScore} points`;
+      value = (state === 'ready') ?
+        `${this.maxScore} ${Dictionary.get('points')}` :
+        `${score} ${Dictionary.get('of')} ${this.maxScore} ${Dictionary.get('points')}`;
     }
 
     this.$value.text(value);

@@ -153,7 +153,10 @@ export default class PopupLayout extends BaseLayout {
     });
 
     this.headerButton.on('skip', () => {
-      const confirmDialog = new H5P.ConfirmationDialog({headerText: 'Are you sure?', dialogText: 'If quiting this lesson, no score will be given.'});
+      const confirmDialog = new H5P.ConfirmationDialog({
+        headerText: Dictionary.get('quitUnitConfirmationHeader'),
+        dialogText: Dictionary.get('quitUnitConfirmationBody')
+      });
       confirmDialog.appendTo(Popup.getInstance().getDomElement().get(0));
       confirmDialog.on('confirmed', () => this.hide());
       confirmDialog.show();

@@ -336,9 +336,14 @@
         "default": "Info Lesson"
       },
       {
-        "name": "infoLessonValue",
+        "name": "points",
         "type": "text",
-        "default": "0 points"
+        "default": "points"
+      },
+      {
+        "name": "of",
+        "type": "text",
+        "default": "of"
       },
       {
         "name": "noScoreLabel",
@@ -349,6 +354,21 @@
         "name": "retryButtonLabel",
         "type": "text",
         "default": "Retry"
+      },
+      {
+        "name": "quitUnitConfirmationHeader",
+        "type": "text",
+        "default": "Are you sure?"
+      },
+      {
+        "name": "quitUnitConfirmationBody",
+        "type": "text",
+        "default": "If quitting this lesson, no score will be given."
+      },
+      {
+        "name": "openMiniCourse",
+        "type": "text",
+        "default": "Open mini course"
       },
       {
         "name": "summary",

@@ -81,8 +81,8 @@ export default class MiniCourse extends H5P.EventDispatcher {
       'class': 'h5p-mini-course-progress h5p-mini-course-result-panel'
     }).appendTo(this.$results);
 
-    this.score = new ProgressCircle(this.maxScore, 'Your Score', false);
-    this.progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
+    this.score = new ProgressCircle(this.maxScore, Dictionary.get('scoreLabel'), false);
+    this.progress = new ProgressCircle(numUnits, Dictionary.get('lessonCompletedLabel'), true);
 
     this.renderer.on('scored', event => {
       const result = event.data;
@@ -112,7 +112,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
 
     this.$fullscreenOverlay = $('<div>', {
       'class': 'h5p-mini-course-overlay',
-      html: '<div class="h5p-mini-course-go-fullscreen">Open mini course</div>',
+      html: `<div class="h5p-mini-course-go-fullscreen">${Dictionary.get('openMiniCourse')}</div>`,
       click: () => {
         H5P.semiFullScreen(this.$container, this, () => {
           this.$fullscreenOverlay.removeClass('hide');
