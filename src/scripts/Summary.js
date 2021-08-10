@@ -56,7 +56,7 @@ export default class Summary extends H5P.EventDispatcher {
 
       $detailedResults.append($('<div>', {
         'class': 'h5p-mini-course-summary-lesson-result',
-        html: `<span class="prefix">Lesson ${result.index}</span><span class="title">${result.header}</span><span class="score">${score}</span>'`
+        html: `<span class="prefix">Lesson ${result.index + 1}</span><span class="title">${result.header}</span><span class="score">${score}</span>'`
       }));
     });
     this.$element.append($detailedResults);
@@ -69,7 +69,7 @@ export default class Summary extends H5P.EventDispatcher {
         click: () => {
           this.trigger('retry');
         }
-      }));      
+      }));
     }
   }
 
