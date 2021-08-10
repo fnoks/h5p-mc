@@ -1,11 +1,38 @@
 import he from 'he';
 
+const DEFAULT_TRANSLATIONS = {
+  lessonStartLabel: 'Start Lesson',
+  lessonLockedLabel: 'Locked',
+  lessonCompletedLabel: 'Lessons completed',
+  skipLabel: 'Skip Lesson',
+  continueLabel: 'Continue',
+  maxScoreLabel: 'Max Score',
+  scoreLabel: 'Your Score',
+  youGotLabel: 'You Got',
+  infoLessonLabel: 'Info Lesson',
+  points: 'points',
+  of: 'of',
+  noScoreLabel: 'No Score',
+  retryButtonLabel: 'Retry',
+  quitUnitConfirmationHeader: 'Are you sure?',
+  quitUnitConfirmationBody: 'If quitting this lesson, no score will be given.',
+  openMiniCourse: 'Open mini course',
+  summary: {
+    header: 'You have completed the mini course!',
+    overallResult: 'You won %score of %maxScore points!',
+    lessonPrefixLabel: 'Lesson %lessonIndex',
+    tryAgain: 'Try again',
+    noScore: 'No score'
+  }
+};
+
 export default class Dictionary {
   /**
    * Fill dictionary with translations.
    * @param {object} translation Translations.
    */
   static fill(translation) {
+    translation = H5P.jQuery.extend(DEFAULT_TRANSLATIONS, translation);
     Dictionary.translation = Dictionary.sanitize(translation);
   }
 
