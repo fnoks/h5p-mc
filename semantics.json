@@ -192,6 +192,7 @@
       },
       {
         "name": "resultsPlacement",
+        "widget": "none",
         "type": "group",
         "label": "Placement of results widget",
         "fields": [
