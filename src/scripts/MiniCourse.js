@@ -61,11 +61,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
       this.$results.append($('<span>', {
         'class': 'h5p-mini-course-fullscreen-button enter',
         click: () => {
-          this.fullscreen = true;
-          H5P.semiFullScreen(this.$container, this);
-          /*const maxHeight = this.$container.height();
-          this.$container.css('height', maxHeigh
-          this.renderer.goFullscreen(maxHeight);*/
+          this.handleEnterFullscreen();
         }
       }));
 
@@ -195,6 +191,15 @@ export default class MiniCourse extends H5P.EventDispatcher {
     const width = Math.floor(this.$unitPanel.innerWidth());
     this.renderer.resize(width);
 
+    // Go to fullscreen dynamically - may not work unless user interacted with content
+    if (
+      !this.fullscreen &&
+      Options.all().layout.fullScreen.fullScreenMode === 'dynamic'
+      && this.$container.width() < Options.all().layout.fullScreen.forceFullScreenWidthThreshold
+    ) {
+      this.handleEnterFullscreen();
+    }
+
     if (this.fullscreen) {
       setTimeout(() => {
         this.setPanelSize();
@@ -323,5 +328,16 @@ export default class MiniCourse extends H5P.EventDispatcher {
 
     // H5P Core function: createTitle
     return H5P.createTitle(raw);
+  }
+
+  /**
+   * Handle enter fullscreen.
+   */
+  handleEnterFullscreen() {
+    this.fullscreen = true;
+    H5P.semiFullScreen(this.$container, this);
+    /*const maxHeight = this.$container.height();
+    this.$container.css('height', maxHeigh
+    this.renderer.goFullscreen(maxHeight);*/
   }
 }
