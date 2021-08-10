@@ -33,11 +33,35 @@ export default class BaseLayout extends H5P.EventDispatcher {
   }
 
   /**
+   * Retrieve current score.
+   * @return {number} Current score.
+   */
+  getScore() {
+    return this.courseUnits.reduce((score, unit) => {
+      return score + unit.getScore();
+    }, 0);
+  }
+
+  /**
    * Get maximum achievable score.
    * @return {number} Maximum achievable score.
    */
   getMaxScore() {
     return this.maxScore;
+  }
+
+  /**
+   * Retrieve xAPI data of children with scoring.
+   * @return {object[]} XAPI data of children with scoring.
+   */
+  getXAPIChildrenData() {
+    return this.courseUnits
+      .map((unit) => {
+        return (typeof unit.getInstance().getXAPIData === 'function') ?
+          unit.getInstance().getXAPIData() :
+          false;
+      })
+      .filter((unit) => unit !== false);
   }
 
   /**

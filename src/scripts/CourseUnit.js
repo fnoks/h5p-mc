@@ -90,6 +90,14 @@ export default class CourseUnit extends H5P.EventDispatcher {
   }
 
   /**
+   * Get current score.
+   * @return {number} Current score.
+   */
+  getScore() {
+    return this.score || 0;
+  }
+
+  /**
    * Get maximum score achievable.
    * @return {number} Maximum score achievable.
    */

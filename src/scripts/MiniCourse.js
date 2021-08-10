@@ -8,6 +8,8 @@ import Popup from './Popup';
 
 const $ = H5P.jQuery;
 
+const DEFAULT_DESCRIPTION = 'Mini Course';
+
 export default class MiniCourse extends H5P.EventDispatcher {
   /**
    * @constructor
@@ -39,6 +41,10 @@ export default class MiniCourse extends H5P.EventDispatcher {
     this.renderer = LayoutFactory.getLayoutEngine();
     this.options.units.forEach((unit, index) => {
       this.renderer.add(unit, index);
+    });
+
+    this.renderer.on('finished', () => {
+      this.handleCourseFinished();
     });
 
     this.$unitPanel.append(this.renderer.getElement());
@@ -227,5 +233,93 @@ export default class MiniCourse extends H5P.EventDispatcher {
     this.$fullscreenOverlay.appendTo($container);
 
     this.updateFullScreenButtonVisibility();
+  }
+
+  /**
+   * Handle course finished.
+   */
+  handleCourseFinished() {
+    // Trigger xAPI answered
+    const xAPIEvent = new H5P.XAPIEvent();
+    $.extend(xAPIEvent.data, this.getXAPIData());
+    this.trigger(xAPIEvent);
+  }
+
+  /**
+   * Get latest score.
+   * @return {number} latest score.
+   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-2}
+   */
+  getScore() {
+    return this.renderer.getScore();
+  }
+
+  /**
+   * Get maximum possible score.
+   * @return {number} Score necessary for mastering.
+   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
+   */
+  getMaxScore() {
+    return this.renderer.getMaxScore();
+  }
+
+  /**
+   * Determine whether course is passed.
+   * @return {boolean} True, if course is passed, else false.
+   */
+  isPassed() {
+    return this.getScore() === this.getMaxScore();
+  }
+
+  /**
+   * Determine whether course is completed.
+   * @return {boolean} True, if course is completed, else false.
+   */
+  isCompleted() {
+    return true;
+  }
+
+  /**
+   * Get xAPI data.
+   * @return {object} XAPI statement.
+   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
+   */
+  getXAPIData() {
+    const xAPIEvent = this.createXAPIEventTemplate('answered');
+
+    // Definition
+    $.extend(
+      xAPIEvent.getVerifiedStatementValue(['object', 'definition']),
+      {
+        name: { 'en-US': this.getTitle() },
+        description: { 'en-US': DEFAULT_DESCRIPTION },
+        interactionType: 'compound', // Required by PHP report, but invalid xAPI
+        type: 'http://adlnet.gov/expapi/activities/cmi.interaction'
+      }
+    );
+
+    // Result
+    xAPIEvent.setScoredResult(this.getScore(), this.getMaxScore(), this,
+      this.isCompleted(), this.isPassed());
+
+    return {
+      statement: xAPIEvent.data.statement,
+      children: this.renderer.getXAPIChildrenData()
+    };
+  }
+
+  /**
+   * Get title.
+   * @return {string} Title.
+   */
+  getTitle() {
+    let raw;
+    if (this.contentData.metadata) {
+      raw = this.contentData.metadata.title;
+    }
+    raw = raw || DEFAULT_DESCRIPTION.DEFAULT_DESCRIPTION;
+
+    // H5P Core function: createTitle
+    return H5P.createTitle(raw);
   }
 }
