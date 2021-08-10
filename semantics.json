@@ -269,7 +269,7 @@
         "type": "text",
         "label": "Background color for course units panel",
         "widget": "colorSelector",
-        "default": "fff"
+        "default": "#fff"
       },
       {
         "name": "backgroundColorResults",

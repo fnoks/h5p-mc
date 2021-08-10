@@ -1,3 +1,26 @@
+/** @const Default options */
+const DEFAULT_OPTIONS = {
+  layoutEngine: 'grid',
+  units: [],
+  behaviour: {
+    retry: true,
+    forceSequential: true
+  },
+  layout: {
+    minimumWidth: 200,
+    fullScreen: 'always',
+    forceFullScreenWidthThreshold: 500,
+    resultsPlacement: {
+      default: 'left'
+    }
+  },
+  theme: {
+    backgroundColorUnits: '#fff',
+    backgroundColorResults: '#1C1D21'
+  },
+  dictionary: {} // Sanitized in Dictionary class
+};
+
 export default class Options {
   /**
    * Fill options with values.
@@ -40,6 +63,9 @@ export default class Options {
    * @return {object} Sanitized options.
    */
   static sanitize(options) {
+    // Set defaults
+    options = H5P.jQuery.extend(DEFAULT_OPTIONS, options);
+  
     // Filter out incomplete units
     options.units = options.units.filter(unit => unit.action);
 
