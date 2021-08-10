@@ -302,7 +302,7 @@
         "name": "lessonCompletedLabel",
         "label": "Lessons completed",
         "type": "text",
-        "default": "Lessons completed"
+        "default": "Lesson completed"
       },
       {
         "name": "skipLabel",
@@ -327,6 +327,11 @@
         "label": "You Score",
         "type": "text",
         "default": "Your Score"
+      },
+      {
+        "name": "progressLabel",
+        "type": "text",
+        "default": "Lessons Completed"
       },
       {
         "name": "youGotLabel",
