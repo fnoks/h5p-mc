@@ -57,24 +57,26 @@ export default class MiniCourse extends H5P.EventDispatcher {
       }
     });
 
-    this.$results.append($('<span>', {
-      'class': 'h5p-mini-course-fullscreen-button enter',
-      click: () => {
-        this.fullscreen = true;
-        H5P.semiFullScreen(this.$container, this);
-        /*const maxHeight = this.$container.height();
-        this.$container.css('height', maxHeigh
-        this.renderer.goFullscreen(maxHeight);*/
-      }
-    }));
+    if (Options.all().layout.fullScreen.fullScreenMode !== 'never') {
+      this.$results.append($('<span>', {
+        'class': 'h5p-mini-course-fullscreen-button enter',
+        click: () => {
+          this.fullscreen = true;
+          H5P.semiFullScreen(this.$container, this);
+          /*const maxHeight = this.$container.height();
+          this.$container.css('height', maxHeigh
+          this.renderer.goFullscreen(maxHeight);*/
+        }
+      }));
 
-    // Add minimize fullscreen icon:
-    this.$results.append($('<span>', {
-      'class': 'h5p-mini-course-fullscreen-button exit',
-      click: () => {
-        H5P.exitFullScreen();
-      }
-    }));
+      // Add minimize fullscreen icon:
+      this.$results.append($('<span>', {
+        'class': 'h5p-mini-course-fullscreen-button exit',
+        click: () => {
+          H5P.exitFullScreen();
+        }
+      }));
+    }
 
     this.maxScoreWidget = new MaxScoreWidget(this.maxScore);
     this.maxScoreWidget.getElement().appendTo(this.$results);
