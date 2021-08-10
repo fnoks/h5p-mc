@@ -288,81 +288,97 @@
     "fields": [
       {
         "name": "lessonStartLabel",
+        "label": "Start Lesson",
         "type": "text",
         "default": "Start Lesson"
       },
       {
         "name": "lessonLockedLabel",
+        "label": "Locked",
         "type": "text",
         "default": "Locked"
       },
       {
         "name": "lessonCompletedLabel",
+        "label": "Lessons completed",
         "type": "text",
         "default": "Lessons completed"
       },
       {
         "name": "skipLabel",
+        "label": "Skip Lesson",
         "type": "text",
         "default": "Skip Lesson"
       },
       {
         "name": "continueLabel",
+        "label": "Continue",
         "type": "text",
         "default": "Continue"
       },
       {
         "name": "maxScoreLabel",
+        "label": "Max Score",
         "type": "text",
         "default": "Max Score"
       },
       {
         "name": "scoreLabel",
+        "label": "You Score",
         "type": "text",
         "default": "Your Score"
       },
       {
         "name": "youGotLabel",
+        "label": "You Got",
         "type": "text",
         "default": "You Got"
       },
       {
         "name": "infoLessonLabel",
+        "label": "Info Lesson",
         "type": "text",
         "default": "Info Lesson"
       },
       {
         "name": "points",
+        "label": "points",
         "type": "text",
         "default": "points"
       },
       {
         "name": "of",
+        "label": "of",
         "type": "text",
         "default": "of"
       },
       {
         "name": "noScoreLabel",
+        "label": "No Score",
         "type": "text",
         "default": "No Score"
       },
       {
         "name": "retryButtonLabel",
+        "label": "Retry",
         "type": "text",
         "default": "Retry"
       },
       {
         "name": "quitUnitConfirmationHeader",
+        "label": "Are you sure?",
         "type": "text",
         "default": "Are you sure?"
       },
       {
         "name": "quitUnitConfirmationBody",
+        "label": "If quitting this lesson, no score will be given.",
         "type": "text",
         "default": "If quitting this lesson, no score will be given."
       },
       {
         "name": "openMiniCourse",
+        "label": "Open mini course",
         "type": "text",
         "default": "Open mini course"
       },
@@ -373,26 +389,33 @@
         "fields": [
           {
             "name": "header",
+            "label": "You have completed the mini course!",
             "type": "text",
             "default": "You have completed the mini course!"
           },
           {
             "name": "overallResult",
+            "label": "You won %score of %maxScore points!",
+            "description": "%score and %maxScore are placeholders and will be replaced with the corresponding values.",
             "type": "text",
             "default": "You won %score of %maxScore points!"
           },
           {
             "name": "lessonPrefixLabel",
+            "label": "Lesson %lessonIndex",
+            "description": "%lessonIndex is a placeholder and will be replaced with the corresponding value.",
             "type": "text",
             "default": "Lesson %lessonIndex"
           },
           {
             "name": "tryAgain",
+            "label": "Try again",
             "type": "text",
             "default": "Try again"
           },
           {
             "name": "noScore",
+            "label": "No score",
             "type": "text",
             "default": "No score"
           }
