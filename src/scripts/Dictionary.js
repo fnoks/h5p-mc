@@ -3,11 +3,12 @@ import he from 'he';
 const DEFAULT_TRANSLATIONS = {
   lessonStartLabel: 'Start Lesson',
   lessonLockedLabel: 'Locked',
-  lessonCompletedLabel: 'Lessons completed',
+  lessonCompletedLabel: 'Lesson completed',
   skipLabel: 'Skip Lesson',
   continueLabel: 'Continue',
   maxScoreLabel: 'Max Score',
   scoreLabel: 'Your Score',
+  progressLabel: 'Lessons completed',
   youGotLabel: 'You Got',
   infoLessonLabel: 'Info Lesson',
   points: 'points',
