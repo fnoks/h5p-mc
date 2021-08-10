@@ -76,7 +76,10 @@ class GridUnit extends CourseUnit {
     this.enabled = false;
 
     this.$unitPanel = $('<div>', {
-      'class': 'h5p-mini-course-unit-panel locked'
+      'class': 'h5p-mini-course-unit-panel locked',
+      'css': {
+        'min-width': `${Options.all().layout.minimumWidth}px`
+      }
     });
 
     this.$unitPanelInner = $('<div>', {
