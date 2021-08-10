@@ -28,6 +28,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "eslint": "^7.32.0",
+    "he": "^1.2.0",
     "mini-css-extract-plugin": "^2.2.0",
     "sass": "^1.37.5",
     "sass-loader": "^12.1.0",
