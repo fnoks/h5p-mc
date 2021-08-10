@@ -300,7 +300,7 @@
       },
       {
         "name": "lessonCompletedLabel",
-        "label": "Lessons completed",
+        "label": "Lesson completed",
         "type": "text",
         "default": "Lesson completed"
       },
@@ -330,6 +330,7 @@
       },
       {
         "name": "progressLabel",
+        "label": "Lessons Completed",
         "type": "text",
         "default": "Lessons Completed"
       },

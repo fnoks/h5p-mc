@@ -86,7 +86,7 @@ export default class MiniCourse extends H5P.EventDispatcher {
     }).appendTo(this.$results);
 
     this.score = new ProgressCircle(this.maxScore, Dictionary.get('scoreLabel'), false);
-    this.progress = new ProgressCircle(numUnits, Dictionary.get('lessonCompletedLabel'), true);
+    this.progress = new ProgressCircle(numUnits, Dictionary.get('progressLabel'), true);
 
     this.renderer.on('scored', event => {
       const result = event.data;
