@@ -153,7 +153,7 @@ export default class PopupLayout extends BaseLayout {
 
     const $header = $('<div>', {
       'class': 'header',
-      text: courseUnit.getHeader(),
+      html: courseUnit.getHeader(),
       append: this.headerButton.getDomElement()
     });
 
