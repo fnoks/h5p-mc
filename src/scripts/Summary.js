@@ -1,4 +1,5 @@
 import Dictionary from './Dictionary';
+import Options from './Options';
 
 const $ = H5P.jQuery;
 
@@ -60,14 +61,16 @@ export default class Summary extends H5P.EventDispatcher {
     });
     this.$element.append($detailedResults);
 
-    // Retry button
-    this.$element.append(H5P.JoubelUI.createButton({
-      'class': 'h5p-mini-course-unit-retry',
-      text: Dictionary.get('summary').tryAgain,
-      click: () => {
-        this.trigger('retry');
-      }
-    }));
+    if (Options.all().behaviour.retry) {
+      // Retry button
+      this.$element.append(H5P.JoubelUI.createButton({
+        'class': 'h5p-mini-course-unit-retry',
+        text: Dictionary.get('summary').tryAgain,
+        click: () => {
+          this.trigger('retry');
+        }
+      }));      
+    }
   }
 
   /**
