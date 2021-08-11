@@ -1,60 +1,83 @@
+import Dictionary from './Dictionary';
+import Options from './Options';
 
 const $ = H5P.jQuery;
 
 export default class Summary extends H5P.EventDispatcher {
 
-  constructor(score, maxScore, lessonResults) {
+  /**
+   * @constructor
+   * @param {object} params Parameters.
+   * @param {number} params.score Score that was achieved.
+   * @param {number} params.maxScore Maximum score achievable.
+   * @param {object[]} params.results Results of tasks.
+   */
+  constructor(params = {}) {
     super();
 
-    const self = this;
-    const $element = $('<div>', {
+    this.params = params;
+
+    this.$element = $('<div>', {
       'class': 'h5p-mini-course-summary'
     });
 
     // Header
-    $element.append($('<div>', {
+    this.$element.append($('<div>', {
       'class': 'h5p-mini-course-summary-header',
-      text: 'You have completed the mini course!' // TODO
+      text: Dictionary.get('summary').header
     }));
 
-    // Create scorebar:
-    var scoreBar = H5P.JoubelUI.createScoreBar(maxScore, 'LABEL TODO');
+    const messageOverallResult = Dictionary.get('summary').overallResult
+      .replace('%score', this.params.score)
+      .replace('%maxScore', this.params.maxScore);
 
-    scoreBar.appendTo($element);
-    setTimeout(function () {
-      scoreBar.setScore(score);
+    // Create scorebar:
+    const scoreBar = H5P.JoubelUI.createScoreBar(this.params.maxScore, messageOverallResult);
+
+    scoreBar.appendTo(this.$element);
+    setTimeout(() => {
+      scoreBar.setScore(this.params.score);
     }, 0);
+
     // Greeting
-    $element.append($('<div>', {
+    this.$element.append($('<div>', {
       'class': 'h5p-mini-course-summary-greeting',
-      text: 'You won 250 of 300 points!' // TODO
+      text: messageOverallResult
     }));
 
     // Add detailed results
-    var $detailedResults = $('<div>', {
+    const $detailedResults = $('<div>', {
       'class': 'h5p-mini-course-summary-lesson-results'
     });
-    lessonResults.forEach(function (result) {
-      var score = result.score ? (result.score + '/' + result.maxScore) : 'No score'; // TODO
+    this.params.results.forEach((result) => {
+      const score = (typeof result.score === 'number') ?
+        (`${result.score}/${result.maxScore}`) :
+        Dictionary.get('summary').noScore;
 
       $detailedResults.append($('<div>', {
         'class': 'h5p-mini-course-summary-lesson-result',
-        html: '<span class="prefix">Lesson ' + result.index + '</span><span class="title">' + result.header + '</span><span class="score">' + score + '</span>'
+        html: `<span class="prefix">Lesson ${result.index + 1}</span><span class="title">${result.header}</span><span class="score">${score}</span>'`
       }));
     });
-    $element.append($detailedResults);
+    this.$element.append($detailedResults);
 
-    // Retry button
-    $element.append(H5P.JoubelUI.createButton({
-      'class': 'h5p-mini-course-unit-retry',
-      text: 'Try again', // TODO - translate
-      click: function () {
-        self.trigger('retry');
-      }
-    }));
+    if (Options.all().behaviour.retry) {
+      // Retry button
+      this.$element.append(H5P.JoubelUI.createButton({
+        'class': 'h5p-mini-course-unit-retry',
+        text: Dictionary.get('summary').tryAgain,
+        click: () => {
+          this.trigger('retry');
+        }
+      }));
+    }
+  }
 
-    self.getElement = function () {
-      return $element;
-    };
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element.
+   */
+  getElement() {
+    return this.$element;
   }
 }

@@ -1,49 +1,69 @@
 import BaseLayout from './BaseLayout';
 import Dictionary from '../Dictionary';
 import Popup from '../Popup';
+import Options from '../Options';
 
 const $ = H5P.jQuery;
 
 class HeaderButton extends H5P.EventDispatcher {
 
+  /**
+   * @constructor
+   */
   constructor() {
     super();
-    var self = this;
 
-    var state = 'skip';
+    this.state = 'skip';
 
     // Create dom element
-    var $action = $('<a>', {
+    this.$action = $('<a>', {
       'class': 'header-button skip-lesson',
       'text': Dictionary.get('skipLabel'),
       tabindex: 0,
-      click: function () {
-        self.trigger(state);
+      click: () => {
+        this.trigger(this.state);
       }
     });
+  }
 
-    self.getDomElement = function () {
-      return $action;
-    };
+  /**
+   * Get DOM element.
+   * @return {jQuery} DOM element.
+   */
+  getDomElement() {
+    return this.$action;
+  }
 
-    self.setState = function (newState) {
-      state = newState;
-      $action.toggleClass('h5p-joubelui-button continue', state === 'continue')
-        .toggleClass('skip-lesson', state === 'skip')
-        .text(state === 'skip' ? Dictionary.get('skipLabel') : Dictionary.get('continueLabel'));
-    };
+  /**
+   * Set state.
+   * @param {string} newState State to set.
+   */
+  setState(newState) {
+    this.state = newState;
+    this.$action.toggleClass('h5p-joubelui-button continue', this.state === 'continue')
+      .toggleClass('skip-lesson', this.state === 'skip')
+      .text(this.state === 'skip' ? Dictionary.get('skipLabel') : Dictionary.get('continueLabel'));
+  }
 
-    self.skip = function () {
-      self.setState('skip');
-    };
+  /**
+   * Set state to 'skip'.
+   */
+  skip() {
+    this.setState('skip');
+  }
 
-    self.continue = function () {
-      self.setState('continue');
-    };
+  /**
+   * Set state to 'continue'.
+   */
+  continue() {
+    this.setState('continue');
+  }
 
-    self.focus = function () {
-      $action.focus();
-    };
+  /**
+   * Focus.
+   */
+  focus() {
+    this.$action.focus();
   }
 }
 
@@ -52,10 +72,14 @@ export default class PopupLayout extends BaseLayout {
     super();
   }
 
+  /**
+   * Add course unit to layout.
+   * @param {CourseUnit} courseUnit Course unit.
+   */
   add(courseUnit) {
     super.add(courseUnit);
 
-    /*var progressedEvent = self.createXAPIEventTemplate('progressed');
+    /*const progressedEvent = self.createXAPIEventTemplate('progressed');
     progressedEvent.data.statement.object.definition.extensions['http://id.tincanapi.com/extension/ending-point'] = event.data.index + 1;
     self.trigger(progressedEvent);*/
 
@@ -89,24 +113,35 @@ export default class PopupLayout extends BaseLayout {
       }
     });*/
 
-    //courseUnit.on('closing-popup', function () {
-      //$popupBg.removeClass('visible');
-      //popup.hide();
-    //});
+    // courseUnit.on('closing-popup', () => {
+    //   this.$popupBg.removeClass('visible');
+    //   this.popup.hide();
+    // });
   }
 
+  /**
+   * Allow to continue.
+   */
   canContinue() {
     this.headerButton.continue();
   }
 
+  /**
+   * Show specific course unit.
+   * @param {CourseUnit} courseUnit Course unit.
+   */
   show(courseUnit) {
     if (!courseUnit.enabled) {
       return;
     }
 
+    if (!Options.all().behaviour.forceSequential) {
+      this.activeElement = courseUnit.index;
+    }
+
     this.headerButton = new HeaderButton();
     const instance = courseUnit.getInstance();
-    var $h5pContent = $('<div>', {
+    const $h5pContent = $('<div>', {
       'class': 'h5p-sub-content'
     });
 
@@ -116,14 +151,17 @@ export default class PopupLayout extends BaseLayout {
       this.headerButton.continue();
     }
 
-    var $header = $('<div>', {
+    const $header = $('<div>', {
       'class': 'header',
-      text: courseUnit.getHeader(),
+      html: courseUnit.getHeader(),
       append: this.headerButton.getDomElement()
     });
 
     this.headerButton.on('skip', () => {
-      var confirmDialog = new H5P.ConfirmationDialog({headerText: 'Are you sure?', dialogText: 'If quiting this lesson, no score will be given.'});
+      const confirmDialog = new H5P.ConfirmationDialog({
+        headerText: Dictionary.get('quitUnitConfirmationHeader'),
+        dialogText: Dictionary.get('quitUnitConfirmationBody')
+      });
       confirmDialog.appendTo(Popup.getInstance().getDomElement().get(0));
       confirmDialog.on('confirmed', () => this.hide());
       confirmDialog.show();
@@ -136,16 +174,18 @@ export default class PopupLayout extends BaseLayout {
       $h5pContent
     ], courseUnit.getClassName());
 
-    setTimeout(() => {this.headerButton.focus()}, 400);
+    setTimeout(() => {
+      this.headerButton.focus();
+    }, 400);
 
     instance.trigger('resize');
-  };
+  }
 
+  /**
+   * Hide currently open course unit.
+   */
   hide() {
-    if (!this.isLastLesson()) {
-      Popup.getInstance().hide();
-    }
-
+    Popup.getInstance().hide();
     this.enableNext();
   }
 }

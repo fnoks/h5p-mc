@@ -3,11 +3,12 @@ import Dictionary from './Dictionary';
 const $ = H5P.jQuery;
 
 export default class MaxScoreWidget {
-
+  /**
+   * @constructor
+   * @param {number} maxScore Maximum score achievable.
+   */
   constructor(maxScore) {
-    var self = this;
-
-    var $element = $('<div>', {
+    this.$element = $('<div>', {
       'class': 'h5p-mini-course-max-score-widget h5p-mini-course-result-panel',
       'html':
         '<div class="max-score-widget-title">' + Dictionary.get('maxScoreLabel') + '</div>' +
@@ -15,9 +16,12 @@ export default class MaxScoreWidget {
           '<div class="max-score-widget-score">' + maxScore + '</div>' +
         '</div>'
     });
+  }
 
-    self.getElement = function () {
-      return $element;
-    };
+  /**
+   * @return {jQuery} DOM element.
+   */
+  getElement() {
+    return this.$element;
   }
 }

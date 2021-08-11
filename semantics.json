@@ -53,24 +53,24 @@
             "H5P.AdvancedText 1.1",
             "H5P.Image 1.1",
             "H5P.Video 1.5",
-            "H5P.Audio 1.3",
+            "H5P.Audio 1.4",
             "H5P.Collage 0.3",
-            "H5P.Column 1.8",
+            "H5P.Column 1.13",
             "H5P.Accordion 1.0",
-            "H5P.Blanks 1.11",
+            "H5P.Blanks 1.12",
             "H5P.SingleChoiceSet 1.11",
-            "H5P.MultiChoice 1.13",
-            "H5P.TrueFalse 1.5",
+            "H5P.MultiChoice 1.14",
+            "H5P.TrueFalse 1.6",
             "H5P.DragQuestion 1.13",
             "H5P.Summary 1.10",
             "H5P.DragText 1.8",
             "H5P.MarkTheWords 1.9",
             "H5P.MemoryGame 1.3",
-            "H5P.QuestionSet 1.16",
-            "H5P.InteractiveVideo 1.20",
-            "H5P.CoursePresentation 1.20",
+            "H5P.QuestionSet 1.17",
+            "H5P.InteractiveVideo 1.22",
+            "H5P.CoursePresentation 1.22",
             "H5P.Timeline 1.1",
-            "H5P.Dialogcards 1.7"
+            "H5P.Dialogcards 1.8"
           ]
         },
         {
@@ -192,6 +192,7 @@
       },
       {
         "name": "resultsPlacement",
+        "widget": "none",
         "type": "group",
         "label": "Placement of results widget",
         "fields": [
@@ -268,14 +269,14 @@
         "type": "text",
         "label": "Background color for course units panel",
         "widget": "colorSelector",
-        "default": "fff"
+        "default": "#fff"
       },
       {
         "name": "backgroundColorResults",
         "type": "text",
         "label": "Background color for results panel",
         "widget": "colorSelector",
-        "default": "fff"
+        "default": "#1C1D21"
       }
     ]
   },
@@ -287,68 +288,105 @@
     "fields": [
       {
         "name": "lessonStartLabel",
+        "label": "Start Lesson",
         "type": "text",
         "default": "Start Lesson"
       },
       {
         "name": "lessonLockedLabel",
+        "label": "Locked",
         "type": "text",
         "default": "Locked"
       },
       {
         "name": "lessonCompletedLabel",
+        "label": "Lesson completed",
         "type": "text",
         "default": "Lesson completed"
       },
       {
         "name": "skipLabel",
+        "label": "Skip Lesson",
         "type": "text",
         "default": "Skip Lesson"
       },
       {
         "name": "continueLabel",
+        "label": "Continue",
         "type": "text",
         "default": "Continue"
       },
       {
         "name": "maxScoreLabel",
+        "label": "Max Score",
         "type": "text",
         "default": "Max Score"
       },
       {
         "name": "scoreLabel",
+        "label": "You Score",
         "type": "text",
         "default": "Your Score"
       },
       {
         "name": "progressLabel",
+        "label": "Lessons Completed",
         "type": "text",
         "default": "Lessons Completed"
       },
       {
         "name": "youGotLabel",
+        "label": "You Got",
         "type": "text",
         "default": "You Got"
       },
       {
         "name": "infoLessonLabel",
+        "label": "Info Lesson",
         "type": "text",
         "default": "Info Lesson"
       },
       {
-        "name": "infoLessonValue",
+        "name": "points",
+        "label": "points",
         "type": "text",
-        "default": "0 points"
+        "default": "points"
+      },
+      {
+        "name": "of",
+        "label": "of",
+        "type": "text",
+        "default": "of"
       },
       {
         "name": "noScoreLabel",
+        "label": "No Score",
         "type": "text",
         "default": "No Score"
       },
       {
         "name": "retryButtonLabel",
+        "label": "Retry",
         "type": "text",
         "default": "Retry"
+      },
+      {
+        "name": "quitUnitConfirmationHeader",
+        "label": "Are you sure?",
+        "type": "text",
+        "default": "Are you sure?"
+      },
+      {
+        "name": "quitUnitConfirmationBody",
+        "label": "If quitting this lesson, no score will be given.",
+        "type": "text",
+        "default": "If quitting this lesson, no score will be given."
+      },
+      {
+        "name": "openMiniCourse",
+        "label": "Open mini course",
+        "type": "text",
+        "default": "Open mini course"
       },
       {
         "name": "summary",
@@ -357,22 +395,38 @@
         "fields": [
           {
             "name": "header",
+            "label": "You have completed the mini course!",
             "type": "text",
             "default": "You have completed the mini course!"
           },
           {
             "name": "overallResult",
+            "label": "You won %score of %maxScore points!",
+            "description": "%score and %maxScore are placeholders and will be replaced with the corresponding values.",
             "type": "text",
             "default": "You won %score of %maxScore points!"
           },
           {
             "name": "lessonPrefixLabel",
+            "label": "Lesson %lessonIndex",
+            "description": "%lessonIndex is a placeholder and will be replaced with the corresponding value.",
             "type": "text",
             "default": "Lesson %lessonIndex"
+          },
+          {
+            "name": "tryAgain",
+            "label": "Try again",
+            "type": "text",
+            "default": "Try again"
+          },
+          {
+            "name": "noScore",
+            "label": "No score",
+            "type": "text",
+            "default": "No score"
           }
         ]
       }
-
     ]
   }
 ]

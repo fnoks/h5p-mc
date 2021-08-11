@@ -1,4 +1,3 @@
-import CourseUnit from './CourseUnit';
 import LayoutFactory from './LayoutFactory';
 import Dictionary from './Dictionary';
 import Options from './Options';
@@ -9,181 +8,336 @@ import Popup from './Popup';
 
 const $ = H5P.jQuery;
 
+const DEFAULT_DESCRIPTION = 'Mini Course';
+
 export default class MiniCourse extends H5P.EventDispatcher {
   /**
    * @constructor
    * @extends Question
-   * @param {object} options Options for single choice set
-   * @param {string} contentId H5P instance id
-   * @param {Object} contentData H5P instance data
+   * @param {object} options Options for single choice set.
+   * @param {string} contentId H5P instance id.
+   * @param {object} contentData H5P instance data.
    */
   constructor(options, contentId, contentData) {
     super();
-    var self = this;
 
-    var fullscreen = false;
+    this.fullscreen = false;
+    this.contentData = contentData;
 
+    this.options = Options.sanitize(options);
     Dictionary.fill(options.dictionary);
     Options.fill(options, contentId);
 
-    var $unitPanel = $('<div>', {
-      'class': 'h5p-mini-course-units'
-    });
-
-    var results = [];
-    var numUnits = options.units.length;
-
-    var renderer = LayoutFactory.getLayoutEngine();
-    options.units.forEach(function (unit, index) {
-      renderer.add(unit, index);
-    });
-
-    $unitPanel.append(renderer.getElement());
-    var maxScore = renderer.getMaxScore();
-
-    var $results = $('<div>', {
-      'class': 'h5p-mini-course-results'
-    });
-
-    $results.append($('<span>', {
-      'class': 'h5p-mini-course-fullscreen-button enter',
-      click: function () {
-        fullscreen = true;
-        H5P.semiFullScreen(self.$container, self);
-        /*const maxHeight = self.$container.height();
-        self.$container.css('height', maxHeigh
-        renderer.goFullscreen(maxHeight);*/
+    this.$unitPanel = $('<div>', {
+      'class': 'h5p-mini-course-units',
+      'css': {
+        'background-color': this.options.theme.backgroundColorUnits
       }
-    }));
-    // Add minimize fullscreen icon:
-    $results.append($('<span>', {
-      'class': 'h5p-mini-course-fullscreen-button exit',
-      click: function () {
-        H5P.exitFullScreen();
+    });
+
+    this.results = [];
+    const numUnits = this.options.units.length;
+
+    this.renderer = LayoutFactory.getLayoutEngine();
+    this.options.units.forEach((unit, index) => {
+      this.renderer.add(unit, index);
+    });
+
+    this.renderer.on('finished', () => {
+      this.handleCourseFinished();
+    });
+
+    this.$unitPanel.append(this.renderer.getElement());
+    this.maxScore = this.renderer.getMaxScore();
+
+    this.$results = $('<div>', {
+      'class': 'h5p-mini-course-results',
+      'css': {
+        'background-color': this.options.theme.backgroundColorResults
       }
-    }));
+    });
 
-    var maxScoreWidget = new MaxScoreWidget(maxScore);
-    maxScoreWidget.getElement().appendTo($results);
+    if (Options.all().layout.fullScreen.fullScreenMode !== 'never') {
+      this.$results.append($('<span>', {
+        'class': 'h5p-mini-course-fullscreen-button enter',
+        click: () => {
+          this.handleEnterFullscreen();
+        }
+      }));
 
-    var $scorePanel = $('<div>', {
+      // Add minimize fullscreen icon:
+      this.$results.append($('<span>', {
+        'class': 'h5p-mini-course-fullscreen-button exit',
+        click: () => {
+          H5P.exitFullScreen();
+        }
+      }));
+    }
+
+    this.maxScoreWidget = new MaxScoreWidget(this.maxScore);
+    this.maxScoreWidget.getElement().appendTo(this.$results);
+
+    this.$scorePanel = $('<div>', {
       'class': 'h5p-mini-course-score h5p-mini-course-result-panel'
-    }).appendTo($results);
+    }).appendTo(this.$results);
 
-    var $progressPanel = $('<div>', {
+    this.$progressPanel = $('<div>', {
       'class': 'h5p-mini-course-progress h5p-mini-course-result-panel'
-    }).appendTo($results);
+    }).appendTo(this.$results);
 
-    var score = new ProgressCircle(maxScore, 'Your Score', false);
-    var progress = new ProgressCircle(numUnits, 'Lessons Completed', true);
+    this.score = new ProgressCircle(this.maxScore, Dictionary.get('scoreLabel'), false);
+    this.progress = new ProgressCircle(numUnits, Dictionary.get('progressLabel'), true);
 
-    renderer.on('scored', event => {
+    this.renderer.on('scored', event => {
       const result = event.data;
 
-      const previousResult = results[result.index];
+      const previousResult = this.results[result.index];
 
       if (previousResult) {
-        score.increment(-previousResult.score);
+        this.score.increment(-previousResult.score);
       }
 
-      results[result.index] = result;
-      score.increment(result.score);
+      this.results[result.index] = result;
+      this.score.increment(result.score);
     });
-    renderer.on('progress', event => progress.setCurrent(event.data.index));
-    renderer.on('finished', event => showSummary());
+    this.renderer.on('progress', event => this.progress.setCurrent(event.data.index));
+    this.renderer.on('finished', () => this.showSummary());
 
-    self.on('enterFullScreen', function () {
+    this.on('enterFullScreen', () => {
       this.$container.addClass('h5p-fullscreen');
-      fullscreen = true;
+      this.fullscreen = true;
     });
 
     // Respond to exit full screen event
-    self.on('exitFullScreen', function () {
+    this.on('exitFullScreen', () => {
       this.$container.removeClass('h5p-fullscreen');
-      fullscreen = false;
+      this.fullscreen = false;
     });
 
-    var $fullscreenOverlay = $('<div>', {
+    this.$fullscreenOverlay = $('<div>', {
       'class': 'h5p-mini-course-overlay',
-      html: '<div class="h5p-mini-course-go-fullscreen">Open mini course</div>',
-      click: function () {
-        H5P.semiFullScreen(self.$container, self, function () {
-          $fullscreenOverlay.removeClass('hide');
+      html: `<div class="h5p-mini-course-go-fullscreen">${Dictionary.get('openMiniCourse')}</div>`,
+      click: () => {
+        H5P.semiFullScreen(this.$container, this, () => {
+          this.$fullscreenOverlay.removeClass('hide');
         });
-        $fullscreenOverlay.addClass('hide');
+        this.$fullscreenOverlay.addClass('hide');
       }
     });
 
-    self.reset = function () {
-      results = [];
-      progress.reset();
-      score.reset();
-      renderer.reset();
+    this.on('resize', this.resize);
+  }
 
-      setTimeout(function () {
-        $unitPanel.removeClass('finished');
-      }, 600);
-    };
+  /**
+   * Reset course.
+   */
+  reset() {
+    this.results = [];
+    this.progress.reset();
+    this.score.reset();
+    this.renderer.reset();
 
-    var showSummary = () => {
-      var summary = new Summary(score.getScore(), maxScore, results);
-      var $summaryElement = summary.getElement();
+    setTimeout(() => {
+      this.$unitPanel.removeClass('finished');
+    }, 600);
+  }
 
-      summary.on('retry', () => {
-        Popup.getInstance().hide();
-        $summaryElement.detach();
-        self.reset();
-      });
+  /**
+   * Show the summary.
+   */
+  showSummary() {
+    const summary = new Summary({
+      score: this.score.getScore(),
+      maxScore: this.maxScore,
+      results: this.results
+    });
+    const $summaryElement = summary.getElement();
 
-      Popup.getInstance().replace([$summaryElement], 'summary');
-    };
+    summary.on('retry', () => {
+      Popup.getInstance().hide();
+      $summaryElement.detach();
+      this.reset();
+    });
 
-    var updateFullScreenButtonVisibility = () => {
-      // If already in full screen, do nothing
-      if (fullscreen) {
-        return;
+    Popup.getInstance().replace([$summaryElement], 'summary');
+  }
+
+  /**
+   * Update visibility of fullscreen button.
+   */
+  updateFullScreenButtonVisibility() {
+    // If already in full screen, do nothing
+    if (this.fullscreen) {
+      return;
+    }
+
+    let forceFullscreen = false;
+    if (this.options.layout.fullScreen.fullScreenMode === 'always') {
+      forceFullscreen = true;
+    }
+    else if (this.options.layout.fullScreen.fullScreenMode === 'dynamic') {
+      forceFullscreen = (this.$container.width() < this.options.layout.fullScreen.forceFullScreenWidthThreshold);
+    }
+
+    this.$container.toggleClass('h5p-mini-course-force-fullscreen', forceFullscreen);
+  }
+
+  /**
+   * Resize content.
+   */
+  resize() {
+    this.$unitPanel.css({ 'height': '', 'min-height': '' });
+    this.$results.css('height', '');
+    const width = Math.floor(this.$unitPanel.innerWidth());
+    this.renderer.resize(width);
+
+    // Go to fullscreen dynamically - may not work unless user interacted with content
+    if (
+      !this.fullscreen &&
+      Options.all().layout.fullScreen.fullScreenMode === 'dynamic'
+      && this.$container.width() < Options.all().layout.fullScreen.forceFullScreenWidthThreshold
+    ) {
+      this.handleEnterFullscreen();
+    }
+
+    if (this.fullscreen) {
+      setTimeout(() => {
+        this.setPanelSize();
+      }, 0); // height values in panels needs to be reset in DOM
+    }
+    else {
+      this.setPanelSize();
+    }
+  }
+
+  /**
+   * Set panel size.
+   */
+  setPanelSize() {
+    const minHeight = `${this.$results.parent().height()}px`;
+
+    if (this.$results.css('min-height') === '0px') {
+      this.$results.css('min-height', minHeight);
+    }
+    this.$results.css('height', minHeight);
+
+    this.$unitPanel.css(this.fullscreen ? 'height' : 'min-height', minHeight);
+  }
+
+  /**
+   * Attach to container
+   * @param  {jQuery} $container Container to attach course content to.
+   */
+  attach($container) {
+    this.$container = $container;
+    Popup.setup($container);
+
+    // Something strange about the order here:
+    this.score.appendTo(this.$scorePanel);
+    this.progress.appendTo(this.$progressPanel);
+    this.$results.appendTo($container);
+    this.$unitPanel.appendTo($container);
+    this.$fullscreenOverlay.appendTo($container);
+
+    this.updateFullScreenButtonVisibility();
+  }
+
+  /**
+   * Handle course finished.
+   */
+  handleCourseFinished() {
+    // Trigger xAPI answered
+    const xAPIEvent = new H5P.XAPIEvent();
+    $.extend(xAPIEvent.data, this.getXAPIData());
+    this.trigger(xAPIEvent);
+  }
+
+  /**
+   * Get latest score.
+   * @return {number} latest score.
+   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-2}
+   */
+  getScore() {
+    return this.renderer.getScore();
+  }
+
+  /**
+   * Get maximum possible score.
+   * @return {number} Score necessary for mastering.
+   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
+   */
+  getMaxScore() {
+    return this.renderer.getMaxScore();
+  }
+
+  /**
+   * Determine whether course is passed.
+   * @return {boolean} True, if course is passed, else false.
+   */
+  isPassed() {
+    return this.getScore() === this.getMaxScore();
+  }
+
+  /**
+   * Determine whether course is completed.
+   * @return {boolean} True, if course is completed, else false.
+   */
+  isCompleted() {
+    return true;
+  }
+
+  /**
+   * Get xAPI data.
+   * @return {object} XAPI statement.
+   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
+   */
+  getXAPIData() {
+    const xAPIEvent = this.createXAPIEventTemplate('answered');
+
+    // Definition
+    $.extend(
+      xAPIEvent.getVerifiedStatementValue(['object', 'definition']),
+      {
+        name: { 'en-US': this.getTitle() },
+        description: { 'en-US': DEFAULT_DESCRIPTION },
+        interactionType: 'compound', // Required by PHP report, but invalid xAPI
+        type: 'http://adlnet.gov/expapi/activities/cmi.interaction'
       }
+    );
 
-      var forceFullscreen = false;
-      if (options.layout.fullScreen.fullScreenMode === 'always') {
-        forceFullscreen = true;
-      }
-      else if (options.layout.fullScreen.fullScreenMode === 'dynamic') {
-        forceFullscreen = (self.$container.width() < options.layout.fullScreen.forceFullScreenWidthThreshold);
-      }
+    // Result
+    xAPIEvent.setScoredResult(this.getScore(), this.getMaxScore(), this,
+      this.isCompleted(), this.isPassed());
 
-      self.$container.toggleClass('h5p-mini-course-force-fullscreen', forceFullscreen);
+    return {
+      statement: xAPIEvent.data.statement,
+      children: this.renderer.getXAPIChildrenData()
     };
+  }
 
-    self.resize = () => {
-      $unitPanel.css('min-height', '');
-      var width = Math.floor($unitPanel.innerWidth());
-      renderer.resize(width);
+  /**
+   * Get title.
+   * @return {string} Title.
+   */
+  getTitle() {
+    let raw;
+    if (this.contentData.metadata) {
+      raw = this.contentData.metadata.title;
+    }
+    raw = raw || DEFAULT_DESCRIPTION.DEFAULT_DESCRIPTION;
 
-      const minHeight = $results.parent().height() + 'px';
+    // H5P Core function: createTitle
+    return H5P.createTitle(raw);
+  }
 
-      $results.css('min-height', minHeight);
-      $unitPanel.css(fullscreen ? 'height' : 'min-height', minHeight);
-    };
-    self.on('resize', self.resize);
-
-    /**
-     * Attach to container
-     * @param  {[type]} $container [description]
-     * @return {[type]}
-     */
-    self.attach = ($container) => {
-      self.$container = $container;
-      Popup.setup($container);
-
-      // Something strange about the order here:
-      score.appendTo($scorePanel);
-      progress.appendTo($progressPanel);
-      $results.appendTo($container);
-      $unitPanel.appendTo($container);
-      $fullscreenOverlay.appendTo($container);
-
-      updateFullScreenButtonVisibility();
-    };
+  /**
+   * Handle enter fullscreen.
+   */
+  handleEnterFullscreen() {
+    this.fullscreen = true;
+    H5P.semiFullScreen(this.$container, this);
+    /*const maxHeight = this.$container.height();
+    this.$container.css('height', maxHeigh
+    this.renderer.goFullscreen(maxHeight);*/
   }
 }
