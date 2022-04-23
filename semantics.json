@@ -27,6 +27,12 @@
     "label": "Course units",
     "min": 1,
     "defaultNum": 1,
+    "widgets": [
+      {
+        "name": "VerticalTabs",
+        "label": "Default"
+      }
+    ],
     "field": {
       "name": "unit",
       "type": "group",
