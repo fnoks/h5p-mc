@@ -70,7 +70,11 @@
             "H5P.InteractiveVideo 1.22",
             "H5P.CoursePresentation 1.22",
             "H5P.Timeline 1.1",
-            "H5P.Dialogcards 1.8"
+            "H5P.Dialogcards 1.8",
+            "H5P.Crossword 0.4",
+            "H5P.Dictation 1.1",
+            "H5P.Essay 1.4",
+            "H5P.SortParagraphs 0.11"
           ]
         },
         {
