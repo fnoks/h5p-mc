@@ -121,10 +121,10 @@
   padding-left: 0em;
 }
 .containerBlock .full-size-button {
-  width: calc(100%-1em);
+  width: calc(100% - 1em);
 }
 .containerBlock .regular-button {
-  width: calc(20%-1em);
+  width: calc(20% - 1em);
 }
 .containerBlock .right-image {
   float: right;
